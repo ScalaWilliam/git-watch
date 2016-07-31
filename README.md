@@ -47,11 +47,7 @@ We need to set up the hook and then listen to it
 Inside the target git repository, run:
 
 ```
-git-watch
-```
-
-If you don't want to get events without a repository, run:
-
-```
-git-watch github/scalawilliam/git.watch
+wget https://raw.githubusercontent.com/ScalaWilliam/git.watch/master/{git-watch.sh,get-master-push.py}
+chmod +x git-watch.sh get-master-push.py auto-deploy-master.sh
+./git-watch.sh | get-master-push.py | xargs -0
 ```
