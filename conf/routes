@@ -1,2 +1,4 @@
-POST        /github/                    @controllers.GitHub.push
-GET         /github/:owner/:repo        @controllers.GitHub.watch(owner: String, repo: String)
+POST        /github/                       @controllers.GitHub.push
+GET         /github/:owner/:repo           @controllers.GitHub.watch(owner: String, repo: String)
+POST        /bitbucket/                    @controllers.GitHub.push
+GET         /bitbucket/:owner/:repo        @controllers.GitHub.watch(owner: String, repo: String)

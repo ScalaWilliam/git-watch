@@ -23,7 +23,7 @@ class GitHub @Inject()(applicationLifecycle: ApplicationLifecycle)(implicit acto
 
   import concurrent.duration._
 
-  val keepAlive = actorSystem.scheduler.schedule(5.seconds, 10.seconds) {
+  val keepAlive = actorSystem.scheduler.schedule(1.second, 5.seconds) {
     channel.push(Event(data = "", id = None, name = None))
   }
 

@@ -18,3 +18,40 @@ What if you wanted to test push hooks locally, what if you're behind a firewall?
 What if you wanted it to be free and quick to set up?
 
 But there's nothing particularly huge in just passing events forward, which is what we'll do for you, for free. Using the most basic tools.
+
+
+## Usage
+
+We need to set up the hook and then listen to it
+
+### Set up the hook
+
+#### GitHub
+
+1. Go to "Settings" in your repository
+2. Press "Webhooks & services"
+3. Press "Add webhook"
+4. In "Payload URL", write "http://git.watch/github/"
+5. Press "Add webhook"
+
+#### BitBucket
+
+1. Go to "Settings" in your repository
+2. Press "Webhooks"
+3. Press "Add webhook"
+4. In "URL", write "http://git.watch/bitbucket/"
+5. Press "Save"
+
+### Listen for events
+
+Inside the target git repository, run:
+
+```
+git-watch
+```
+
+If you don't want to get events without a repository, run:
+
+```
+git-watch github/scalawilliam/git.watch
+```
