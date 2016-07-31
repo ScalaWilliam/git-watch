@@ -1,0 +1,2 @@
+POST        /push/github/:id        @controllers.GitHub.push(id: String)
+POST        /get/github/:id         @controllers.GitHub.get(id: String)

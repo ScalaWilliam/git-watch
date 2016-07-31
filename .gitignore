@@ -1,0 +1,10 @@
+.idea
+*.iml
+out
+*.class
+*.log
+.cache
+.history
+*~
+target/
+logs/
