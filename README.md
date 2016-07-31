@@ -11,6 +11,7 @@ Sign up at: [http://git.watch]
 Git push hooks are wonderful. They enable continuous deployment and continuous integration.
 
 Unfortunately you need to set up a server to receive them and this creates an ugly coupling.
+
 For my open source projects, I've tried decoupling using AWS. I got a huge bill the next month.
 
 What if you wanted to test push hooks locally, what if you're behind a firewall? It becomes quite complex.
@@ -47,7 +48,15 @@ We need to set up the hook and then listen to it
 Inside the target git repository, run:
 
 ```
-wget https://raw.githubusercontent.com/ScalaWilliam/git.watch/master/{git-watch.sh,get-master-push.py}
-chmod +x git-watch.sh get-master-push.py auto-deploy-master.sh
-./git-watch.sh | get-master-push.py | xargs -0
+wget https://raw.githubusercontent.com/ScalaWilliam/git-watch/master/git-watch.py
+pip install sseclient
+chmod +x git-watch.py
+./git-watch.py https://github.com/ScalaWilliam/git-watch
+```
+
+Create a 'deploy.sh' as well if you like, to execute anything after auto syncing the reposiroty.
+
+I also tried to do event source with curl:
+```
+curl -f --retry 9999 --retry-delay 10 --retry-max-time 0 $url
 ```
