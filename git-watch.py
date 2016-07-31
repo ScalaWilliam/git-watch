@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 from sseclient import SSEClient
 import requests
 import time
@@ -12,7 +12,7 @@ def get_messages(url):
             messages = SSEClient(url)
             for msg in messages:
                 yield msg
-        except requests.exceptions.HTTPError, e:
+        except requests.exceptions.HTTPError as e:
             if e.response.status_code / 100 == 5:
                 time.sleep(10)
             else:
@@ -23,8 +23,8 @@ def master_deploy(message):
         if message.event == 'push' and message.id == 'refs/heads/master' and message.data.isalnum():
             subprocess.call(["git", "fetch"])
             subprocess.call(["git", "checkout", message.data])
-            if os.path.isfile("./deploy.sh"):
-                subprocess.call(["./deploy.sh", message.data])
+            if os.path.isfile("deploy.sh"):
+                subprocess.call(["bash", "deploy.sh", message.data])
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:

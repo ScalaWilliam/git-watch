@@ -49,7 +49,7 @@ Inside the target git repository, run:
 
 ```
 wget https://raw.githubusercontent.com/ScalaWilliam/git-watch/master/git-watch.py
-pip install sseclient
+python3 -m pip install sseclient
 chmod +x git-watch.py
 ./git-watch.py https://github.com/ScalaWilliam/git-watch
 ```
