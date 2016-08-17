@@ -41,43 +41,34 @@ class TestPushParse extends FunSuite with Matchers {
 
   }
 
-  test("Watcher works with a ref filter") {
+  test("Watcher produces a ref event and a complete event") {
     val watcher = GitHub.buildWatcher("AptElements/git-watch", FakeRequest(
       method = "GET", uri = "/?event=simple-push", headers = Headers(), body = ""
     ))
-    val wrspv = watcher.right.toOption.flatMap(_.apply(pushSample)).get
-    wrspv.name.get shouldBe "ref-push"
-    wrspv.data shouldBe """{"ref":"refs/heads/master","commit":"1f07dd2f46445a7ba3cb6f6a938ba9e3b855362c"}"""
-    wrspv.id.get shouldBe "447f65f3-e3a0-43bb-8cd9-5e5a1cd8ae08"
+
+    val List(first, second) = watcher.apply(pushSample)
+
+    first.name.get shouldBe "push"
+    first.data shouldBe pushSample.body
+    first.id.get shouldBe "447f65f3-e3a0-43bb-8cd9-5e5a1cd8ae08"
+
+    second.name.get shouldBe "ref-push"
+    second.data shouldBe """{"ref":"refs/heads/master","commit":"1f07dd2f46445a7ba3cb6f6a938ba9e3b855362c"}"""
+    second.id.get shouldBe "447f65f3-e3a0-43bb-8cd9-5e5a1cd8ae08"
   }
 
   test("Watcher secret fails") {
     val watcher = GitHub.buildWatcher("AptElements/git-watch", FakeRequest(
       method = "GET", uri = "/?event=simple-push&secret=a", headers = Headers(), body = ""
     ))
-    val wrspv = watcher.right.toOption.flatMap(_.apply(pushSample))
-    wrspv shouldBe empty
+    watcher(pushSample) shouldBe empty
   }
 
   test("Watcher secret works") {
     val watcher = GitHub.buildWatcher("AptElements/git-watch", FakeRequest(
       method = "GET", uri = "/?event=simple-push&secret=test", headers = Headers(), body = ""
     ))
-    val wrspv = watcher.right.toOption.flatMap(_.apply(pushSample)).get
-    wrspv.name.get shouldBe "ref-push"
-    wrspv.data shouldBe """{"ref":"refs/heads/master","commit":"1f07dd2f46445a7ba3cb6f6a938ba9e3b855362c"}"""
-    wrspv.id.get shouldBe "447f65f3-e3a0-43bb-8cd9-5e5a1cd8ae08"
-  }
-
-  test("Generic watcher works") {
-    val watcher = GitHub.buildWatcher("AptElements/git-watch", FakeRequest(
-      method = "GET", uri = "/?event=push", headers = Headers(), body = ""
-    ))
-    watcher.isRight shouldBe true
-    val wrspv = watcher.right.toOption.flatMap(_.apply(pushSample)).get
-    wrspv.name.get shouldBe "push"
-    wrspv.data shouldBe pushSample.body
-    wrspv.id.get shouldBe "447f65f3-e3a0-43bb-8cd9-5e5a1cd8ae08"
+    watcher(pushSample) should have size 2
   }
 
 }

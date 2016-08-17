@@ -4,7 +4,7 @@ import javax.inject.{Inject, Singleton}
 
 import akka.actor.ActorSystem
 import akka.stream.scaladsl.Source
-import model.github.{HookRequest, PushParse, WatchPreset, WatchingSetting}
+import model.github._
 import play.api.inject.ApplicationLifecycle
 import play.api.libs.EventSource.Event
 import play.api.libs.iteratee.Concurrent
@@ -50,7 +50,7 @@ class GitHub @Inject()(applicationLifecycle: ApplicationLifecycle)(implicit acto
       fullRepo = s"$owner/$repo",
       requestHeader = rq
     ) match {
-      case Right(watcher) =>
+      case watcher =>
         val dataSource: Source[Event, _] = {
           source.expand {
             case Left(v) => Iterator(Event(""))
@@ -58,26 +58,22 @@ class GitHub @Inject()(applicationLifecycle: ApplicationLifecycle)(implicit acto
           }
         }
         Ok.chunked(content = dataSource).as("text/event-stream")
-      case Left(reason) =>
-        Ok("BAD")
     }
   }
 }
 
 object GitHub {
-  def buildWatcher(fullRepo: String, requestHeader: RequestHeader): Either[String, HookRequest => Option[Event]] = {
+  def buildWatcher(fullRepo: String, requestHeader: RequestHeader): HookRequest => List[Event] = {
     val ws = WatchingSetting(repositoryName = fullRepo, secret = requestHeader.getQueryString("secret"))
-    val watchPreset = requestHeader.getQueryString("event") match {
-      case Some("simple-push") => Right(WatchPreset.SimplePushes)
-      case Some(eventType) => Right(WatchPreset.OnEvent(eventType))
-      case o => Left(s"Not good type: ${o}")
-    }
-    watchPreset.right.map { wp => { (hookRequest: HookRequest) =>
-      if (ws.filter(hookRequest)) wp.buildEvent(hookRequest)
-      else None
-    }
+
+    { (hookRequest: HookRequest) =>
+      if (ws.filter(hookRequest)) {
+        (CompleteDataPush.buildEvent(hookRequest) ++ RefPush.buildEvent(hookRequest)).toList
+      }
+      else List.empty
     }
   }
+
 }
 
 
