@@ -38,13 +38,14 @@ if (!('url' in args.options)) {
     console.error("Require a URL");
 } else {
     var url = args.options['url'];
-    if ( 'secret' in args.options ) {
+    if ('secret' in args.options) {
         url = url + '?secret=' + encodeURIComponent(args.options['secret']);
     }
     var es = new EventSource(url);
     if ('event' in args.options) {
-        es.addEventListener(args.options['event'] == '*' ? 'message' : args.options['event'], function (e) {
-            console.log("Received an event: ", JSON.stringify(e));
+        var listenType = args.options['event'] == '*' ? 'message' : args.options['event'];
+        es.addEventListener(listenType, function (e) {
+            console.log("Received an event: ", JSON.stringify(e), "data =", e.data);
         });
     } else if ('push-execute' in args.options) {
         // es.addEventListener('ref-push'], function(e) {
