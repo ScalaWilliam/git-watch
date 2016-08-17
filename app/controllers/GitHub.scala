@@ -33,11 +33,12 @@ class GitHub @Inject()(applicationLifecycle: ApplicationLifecycle)(implicit acto
 
   def source = Source.fromPublisher(Streams.enumeratorToPublisher(enum))
 
-  def push = Action(BodyParsers.parse.text) { request =>
-    val jsonBody = Json.parse(request.body)
+  def push = Action { request =>
+    val bodyText = request.body.asText.get
+    val jsonBody = Json.parse(bodyText)
     val hr = HookRequest.extract(
       headers = request.headers.toMap.mapValues(_.toList),
-      body = request.body,
+      body = bodyText,
       bodyJson = jsonBody.asInstanceOf[JsObject]
     ).get
     channel.push(Right(hr))
