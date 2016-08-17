@@ -37,19 +37,38 @@ console.log(args);
 if (!('url' in args.options)) {
     console.error("Require a URL");
 } else {
-    var url = args.options['url'];
-    if ('secret' in args.options) {
-        url = url + '?secret=' + encodeURIComponent(args.options['secret']);
-    }
-    var es = new EventSource(url);
-    if ('event' in args.options) {
-        var listenType = args.options['event'] == '*' ? 'message' : args.options['event'];
-        es.addEventListener(listenType, function (e) {
-            console.log("Received an event: ", JSON.stringify(e), "data =", e.data);
-        });
-    } else if ('push-execute' in args.options) {
-        // es.addEventListener('ref-push'], function(e) {
-        //   console.log("Received an event: ", JSON.stringify(e));
-        // });
+    start();
+    function start() {
+        var url = args.options['url'];
+        if ('secret' in args.options) {
+            url = url + '?secret=' + encodeURIComponent(args.options['secret']);
+        }
+        var es = new EventSource(url);
+        es.reconnectInterval = 1000;
+        es.onerror = function (err) {
+            if ("status" in err && (err.status == 502 || err.status == 503)) {
+                es.close();
+                setTimeout(function() {
+                    start();
+                }, 5000);
+            }
+        };
+        if ('event' in args.options) {
+            var listenType = args.options['event'] == '*' ? 'message' : args.options['event'];
+            es.addEventListener(listenType, function (e) {
+                console.log("Received an event: ", JSON.stringify(e), "data =", e.data);
+            });
+        } else if ('push-execute' in args.options) {
+            es.addEventListener('ref-push', function (e) {
+                var jd = JSON.parse(e.data);
+                if (/^\w+$/.test(jd.commit) && /^[\w\/]+$/.test(jd.ref)) {
+                    var command = args.options['push-execute']
+                        .replace("%sha%", jd.commit)
+                        .replace("%ref%", jd.ref);
+                    console.log("Will execute: ", command);
+                    shell.exec(command);
+                }
+            });
+        }
     }
 }
