@@ -34,7 +34,7 @@ object WatchPreset {
     override def buildEvent(hookRequest: HookRequest): Option[Event] = {
       Some(Event(
         data = hookRequest.bodyJson.toString(),
-        id = None,
+        id = Some(hookRequest.requestId),
         name = Some(hookRequest.eventType.name)
       ))
     }
