@@ -13,4 +13,12 @@ class TestPushParse extends FunSuite with Matchers {
     json.as[PushParse].ref shouldBe "refs/heads/master"
   }
 
+  test("Using a secret works") {
+
+  }
+
+  test("Applying the 'deploy to x branch' preset works") {
+
+  }
+
 }

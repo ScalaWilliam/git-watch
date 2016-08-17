@@ -1,10 +1,10 @@
-[![Throughput Graph](https://graphs.waffle.io/ScalaWilliam/git.watch/throughput.svg)](https://waffle.io/ScalaWilliam/git.watch/metrics/throughput)
-
 # git.watch
 
 Zero-configuration Git push hooks as event streams. For free.
 
-Sign up at: [http://git.watch]
+Sign up at: http://git.watch
+
+
 
 ## Problem space
 
@@ -60,3 +60,6 @@ I also tried to do event source with curl:
 ```
 curl -f --retry 9999 --retry-delay 10 --retry-max-time 0 $url
 ```
+
+
+[![Throughput Graph](https://graphs.waffle.io/ScalaWilliam/git.watch/throughput.svg)](https://waffle.io/ScalaWilliam/git.watch/metrics/throughput)
