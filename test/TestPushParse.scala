@@ -1,7 +1,11 @@
 
-import org.apache.commons.codec.digest.HmacUtils
+import controllers.GitHub
+import model.github.EventType.PushEvent
+import model.github.HookRequest
 import org.scalatest.{FunSuite, Matchers}
 import play.api.libs.json.{JsObject, Json}
+import play.api.mvc.Headers
+import play.api.test.FakeRequest
 
 import scala.io.Source
 
@@ -10,14 +14,8 @@ import scala.io.Source
   */
 class TestPushParse extends FunSuite with Matchers {
 
-  //  test("It works") {
-  //    val sampleJson = """{"ref":"refs/heads/master","before":"c04b0fb8d488e198eab72dc1ff4e619deb30a284","after":"a8b8c587f7dc2750328530b3a0434edeedffca83","created":false,"deleted"}"""
-  //    val json = Json.parse(sampleJson)
-  //    json.as[PushParse].ref shouldBe "refs/heads/master"
-  //  }
-
-  lazy val pingSample = HookRequest.parseSample(scala.io.Source.fromURL(getClass.getResource("/sample-ping.txt")))
-  lazy val pushSample = HookRequest.parseSample(scala.io.Source.fromURL(getClass.getResource("/sample-push.txt")))
+  lazy val pingSample = TestPushParse.parseSample(scala.io.Source.fromURL(getClass.getResource("/sample-ping.txt")))
+  lazy val pushSample = TestPushParse.parseSample(scala.io.Source.fromURL(getClass.getResource("/sample-push.txt")))
 
   test("Sample parses") {
     pingSample
@@ -29,68 +27,36 @@ class TestPushParse extends FunSuite with Matchers {
   test("Using a secret works") {
     pushSample.signatureValid("test").get shouldBe true
     pushSample.signatureValid("testX").get shouldBe false
+    pushSample.requestId shouldBe "447f65f3-e3a0-43bb-8cd9-5e5a1cd8ae08"
+  }
+
+  test("Extracting the push works") {
+    pushSample.eventType == PushEvent
+    val pp = PushEvent.unapply(pushSample.bodyJson).get
+    pp.ref shouldBe "refs/heads/master"
+    pp.after shouldBe "1f07dd2f46445a7ba3cb6f6a938ba9e3b855362c"
   }
 
   test("Applying the 'deploy to x branch' preset works") {
 
   }
 
-}
-
-sealed trait EventType {
-  def name: String
-}
-
-object EventType {
-
-  case object PushEvent extends EventType {
-    override def name: String = "push"
-  }
-
-  case object PingEvent extends EventType {
-    override def name: String = "ping"
-  }
-
-  case class OtherEvent(name: String) extends EventType
-
-  def unapply(str: String): Option[EventType] = {
-    str match {
-      case "push" => Some(PushEvent)
-      case "ping" => Some(PingEvent)
-      case other => Some(OtherEvent(other))
-    }
+  test("Watcher seems to work") {
+    val watcher = GitHub.buildWatcher("AptElements/git-watch", FakeRequest(
+      method = "GET", uri = "/?event=simple-push", headers = Headers(), body = ""
+    ))
+    watcher.isRight shouldBe true
+    val wrg = watcher.right.get
+    val wrsp = wrg.apply(pushSample)
+    val wrspv = wrsp.get
+    wrspv.name.get shouldBe "ref-push"
+    wrspv.data shouldBe """{"ref":"refs/heads/master","commit":"1f07dd2f46445a7ba3cb6f6a938ba9e3b855362c"}"""
+    wrspv.id.get shouldBe "447f65f3-e3a0-43bb-8cd9-5e5a1cd8ae08"
   }
 
 }
 
-case class HookRequest(signature: Option[String], eventType: EventType, body: String, bodyJson: JsObject, repositoryName: String) {
-  def signatureValid(secret: String): Option[Boolean] = {
-    signature.map {
-      case HookRequest.parseSignature(sv) =>
-        val resSignature = HmacUtils.hmacSha1Hex(secret, body)
-        sv == resSignature
-      case _ => false
-    }
-  }
-}
-
-object HookRequest {
-  val parseSignature = """^sha1=(.*)$""".r
-
-  def extract(headers: Map[String, List[String]], body: String, bodyJson: JsObject): Option[HookRequest] = {
-    for {
-      eventType <- headers.get("X-Github-Event").toList.flatMap(_.flatMap(EventType.unapply)).headOption
-      signature = headers.get("X-Hub-Signature").toList.flatten.headOption
-      repo <- (bodyJson \ "repository" \ "full_name").asOpt[String]
-    } yield HookRequest(
-      signature = signature,
-      eventType = eventType,
-      body = body,
-      bodyJson = bodyJson,
-      repositoryName = repo
-    )
-  }
-
+object TestPushParse {
   def parseSample(source: Source): HookRequest = {
     val headers = source.getLines().takeWhile(_ != "").map(_.split(": ")).map { case Array(h, v) =>
       h -> v
@@ -100,3 +66,8 @@ object HookRequest {
     HookRequest.extract(headers = headers, body = body, bodyJson = jsonBody).get
   }
 }
+
+
+
+
+
