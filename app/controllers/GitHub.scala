@@ -18,7 +18,6 @@ import scala.concurrent.{ExecutionContext, Future}
   * Created by me on 31/07/2016.
   */
 
-
 @Singleton
 class GitHub @Inject()(applicationLifecycle: ApplicationLifecycle)(implicit actorSystem: ActorSystem, executionContext: ExecutionContext) extends Controller {
 
