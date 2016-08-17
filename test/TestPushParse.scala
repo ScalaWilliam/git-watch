@@ -19,7 +19,7 @@ class TestPushParse extends FunSuite with Matchers {
   test("Using a secret works") {
     pushSample.signatureValid("test").get shouldBe true
     pushSample.signatureValid("testX").get shouldBe false
-    pushSample.requestId shouldBe "447f65f3-e3a0-43bb-8cd9-5e5a1cd8ae08"
+    pushSample.requestId shouldBe "56fd4d80-646e-11e6-9eff-715f55605d90"
   }
 
   test("Extracting the push works") {
@@ -38,11 +38,11 @@ class TestPushParse extends FunSuite with Matchers {
 
     first.name.get shouldBe "push"
     first.data shouldBe pushSample.body
-    first.id.get shouldBe "447f65f3-e3a0-43bb-8cd9-5e5a1cd8ae08"
+    first.id.get shouldBe "56fd4d80-646e-11e6-9eff-715f55605d90"
 
     second.name.get shouldBe "ref-push"
     second.data shouldBe """{"ref":"refs/heads/master","commit":"1f07dd2f46445a7ba3cb6f6a938ba9e3b855362c"}"""
-    second.id.get shouldBe "447f65f3-e3a0-43bb-8cd9-5e5a1cd8ae08"
+    second.id.get shouldBe "56fd4d80-646e-11e6-9eff-715f55605d90"
   }
 
   test("Watcher secret fails") {

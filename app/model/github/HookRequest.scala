@@ -20,22 +20,22 @@ case class HookRequest(requestId: String, signature: Option[String], eventType: 
   def rebuildHeaders: Map[String, String] = {
     Map(
       HookRequest.XGithubEvent -> eventType.name,
-      HookRequest.XRequestId -> requestId
+      HookRequest.XGitHubDelivery -> requestId
     ) ++ signature.map(v => HookRequest.XHubSignature -> v)
   }
 }
 
 object HookRequest {
-  val XGithubEvent = "X-Github-Event"
+  val XGithubEvent = "X-GitHub-Event"
   val XHubSignature = "X-Hub-Signature"
-  val XRequestId = "X-Request-Id"
+  val XGitHubDelivery = "X-GitHub-Delivery"
   val parseSignature = """^sha1=(.*)$""".r
 
   def extract(headers: Map[String, List[String]], body: String, bodyJson: JsObject): Option[HookRequest] = {
     for {
       eventType <- headers.get(XGithubEvent).toList.flatMap(_.flatMap(EventType.unapply)).headOption
       signature = headers.get(XHubSignature).toList.flatten.headOption
-      requestId <- headers.get(XRequestId).toList.flatten.headOption
+      requestId <- headers.get(XGitHubDelivery).toList.flatten.headOption
       repo <- (bodyJson \ "repository" \ "full_name").asOpt[String]
     } yield HookRequest(
       requestId = requestId,
