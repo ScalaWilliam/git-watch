@@ -25,11 +25,9 @@ class Main @Inject()(wsClient: WSClient)(implicit executionContext: ExecutionCon
   s"""https://gist.githubusercontent.com/ScalaWilliam/7c29a47e081a537605eef430a25f02b1/raw/git.watch.html?ignore=${scala.util.Random.nextInt()}"""
 
   def fetchPage(caching: Boolean): Future[String] = {
-    println(homepage.get(), caching)
     homepage.get() match {
       case Some((etag, content)) if caching =>
         wsClient.url(theUrl).withHeaders("If-None-Match" -> etag).get.map { resp =>
-          println(resp.status)
           if (resp.status == 304) content
           else {
             val etag = resp.header("ETag").get
