@@ -1,18 +1,15 @@
 
 import controllers.GitHub
 import model.github.EventType.PushEvent
-import model.github.HookRequest
-import org.scalatest.{FunSuite, Matchers}
-import play.api.libs.json.{JsObject, Json}
+import org.scalatest.FunSuite
+import org.scalatest.Matchers._
 import play.api.mvc.Headers
 import play.api.test.FakeRequest
-
-import scala.io.Source
 
 /**
   * Created by me on 31/07/2016.
   */
-class TestPushParse extends FunSuite with Matchers {
+class TestPushParse extends FunSuite {
 
   import Samples.pushSample
 
