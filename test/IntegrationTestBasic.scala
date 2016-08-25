@@ -43,7 +43,7 @@ trait IntegrationTestBasic {
       val result = results.mkString("")
       val A = CompleteDataPush.buildEvent(pushSample).get.formatted
       val B = RefPush.buildEvent(pushSample).get.formatted
-      result should (equal (s"$A$B") or equal (s"${GitHub.keepAliveEvent}$A$B"))
+      result should (equal (s"$A$B") or equal (s"${GitHub.keepAliveEvent.formatted}$A$B"))
     }
   }
 }
