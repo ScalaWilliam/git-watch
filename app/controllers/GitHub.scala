@@ -53,7 +53,7 @@ class GitHub @Inject()(applicationLifecycle: ApplicationLifecycle)(implicit acto
       case watcher =>
         val dataSource: Source[Event, _] = {
           source.expand {
-            case Left(v) => Iterator(Event(""))
+            case Left(v) => Iterator(GitHub.keepAliveEvent)
             case Right(hr) => watcher(hr).toIterator
           }
         }
@@ -63,6 +63,8 @@ class GitHub @Inject()(applicationLifecycle: ApplicationLifecycle)(implicit acto
 }
 
 object GitHub {
+  val keepAliveEvent = Event("")
+
   def buildWatcher(fullRepo: String, requestHeader: RequestHeader): HookRequest => List[Event] = {
     val ws = WatchingSetting(repositoryName = fullRepo, secret = requestHeader.getQueryString("secret"))
 

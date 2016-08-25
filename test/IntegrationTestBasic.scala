@@ -1,6 +1,7 @@
 /**
   * Created by me on 25/08/2016.
   */
+import controllers.GitHub
 import model.github.{CompleteDataPush, RefPush}
 import org.scalatest.Matchers._
 import org.scalatestplus.play._
@@ -42,7 +43,7 @@ trait IntegrationTestBasic {
       val result = results.mkString("")
       val A = CompleteDataPush.buildEvent(pushSample).get.formatted
       val B = RefPush.buildEvent(pushSample).get.formatted
-      result shouldEqual s"$A$B"
+      result should (equal (s"$A$B") or equal (s"${GitHub.keepAliveEvent}$A$B"))
     }
   }
 }
