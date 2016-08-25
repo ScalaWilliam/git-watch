@@ -1,4 +1,5 @@
 # git.watch
+[![Build Status](https://travis-ci.org/AptElements/git-watch.svg?branch=master)](https://travis-ci.org/AptElements/git-watch)
 
 Full tutorial at: <http://git.watch>
 
@@ -17,3 +18,4 @@ Full tutorial at: <http://git.watch>
 TODO
 
 [![Throughput Graph](https://graphs.waffle.io/ScalaWilliam/git.watch/throughput.svg)](https://waffle.io/ScalaWilliam/git.watch/metrics/throughput)
+
