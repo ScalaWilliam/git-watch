@@ -13,12 +13,12 @@ The templates are located in 'dist/templates/'.
 
 ```bash
 cd dist/templates
-php -S localhost:8080 router.php
+php -S localhost:8848
 ```
 
 'dist/templates/static/' is served directly by nginx.
 
-'dist/templates/*' is consumed by the Play app and rendered in Scala.
+'dist/templates/*' is rendered by PHP (called by Scala). We use an IoC (Inversion of Control) approach.
 
 ## Licence
 
