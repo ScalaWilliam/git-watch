@@ -26,7 +26,6 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration)(i
 
   def githubCallback = Action {
     req =>
-      //      println(req.headers)
       val code = req.getQueryString("code").get
       val resposeF = wsClient
         .url("https://github.com/login/oauth/access_token")
