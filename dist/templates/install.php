@@ -1,9 +1,12 @@
 <!doctype html>
 <html>
 <head>
-    <title>Install Git Watch Webhooks.</title>
+    <title>Git Watch</title>
+    <link rel="stylesheet" href="static/main.css" type="text/css">
 </head>
 <body>
+<h1>Git Watch</h1>
+<h2>Install</h2>
 <form name="submitter" method="post" enctype="multipart/form-data">
     <button type="submit">Set up git.watch webhooks</button>
     <br/>
