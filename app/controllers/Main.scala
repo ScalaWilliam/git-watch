@@ -22,6 +22,8 @@ class Main @Inject()(wsClient: WSClient, environment: Environment)(implicit exec
   def indexPath = templatesPath.resolve("index.html")
 
   def index = Action {
-    Ok(Html(scala.io.Source.fromFile(indexPath.toFile).mkString))
+    val src = scala.io.Source.fromFile(indexPath.toFile)
+    try Ok(Html(src.mkString))
+    finally src.close()
   }
 }
