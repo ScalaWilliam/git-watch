@@ -19,3 +19,12 @@ TODO
 
 [![Throughput Graph](https://graphs.waffle.io/ScalaWilliam/git.watch/throughput.svg)](https://waffle.io/ScalaWilliam/git.watch/metrics/throughput)
 
+# Licence
+
+Client: MIT Licence.
+
+Server: GPLv3 Licence.
+
+Contributions: copyright transferred to Apt Elements Ltd.
+
+Copyright (2016) Apt Elements Ltd.
