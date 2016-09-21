@@ -78,8 +78,6 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration)(i
       .withHeaders("Authorization" -> s"token $accessToken")
       .post(Json.parse(json)), 5.seconds)
     logger.info(s"user = ${user.json \ "login"} repo id = ${repoId}, accessToken = ${accessToken}, hookUrl = ${hookUrl}, result = ${resX}")
-//    SeeOther(routes.Main.index.url).flashing("message" -> s"Repo $repoId was set up!")
-//    Ok(reposIds.toString() + reposJson.toString())
     Ok(s"""Repo <code>$repoId</code> was set up! <a href="/">Homepage</a>""")
   }
 
