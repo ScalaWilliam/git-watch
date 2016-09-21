@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Git Watch</title>
-    <link rel="stylesheet" href="static/main.css" type="text/css">
+    <link rel="stylesheet" href="/static/main.css" type="text/css">
 </head>
 <body>
 <h1>Git Watch</h1>
