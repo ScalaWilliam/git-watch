@@ -22,13 +22,17 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration)(i
 
   def clientId = configuration.underlying.getString("gw.client-id")
 
+  def githubUrl = configuration.getString("github.url").getOrElse("https://github.com")
+
+  def githubApiUrl = configuration.getString("github.api-url").getOrElse("https://api.github.com")
+
   def clientSecret = configuration.underlying.getString("gw.client-secret")
 
   def githubCallback = Action {
     req =>
       val code = req.getQueryString("code").get
       val resposeF = wsClient
-        .url("https://github.com/login/oauth/access_token")
+        .url(s"$githubUrl/login/oauth/access_token")
         .withHeaders("Accept" -> "application/json")
         .post(Map(
           "client_id" -> Seq(clientId),
@@ -44,7 +48,7 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration)(i
   def installGet = Action { req =>
     req.session.get("access-token") match {
       case Some(accessToken) =>
-        val userUrl = "https://api.github.com/user"
+        val userUrl = s"$githubApiUrl/user"
         val user = Await.result(wsClient.url(userUrl).withHeaders("Authorization" -> s"token $accessToken").get(), 5.seconds)
         val reposUrl = (user.json \ "repos_url").as[String]
         val reposJson = Await.result(wsClient.url(reposUrl)
@@ -54,7 +58,7 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration)(i
         val reponames = (reposJson \\ "full_name").map(_.as[String]).toList
         Ok(views.html.install(reponames))
       case _ =>
-        SeeOther(s"https://github.com/login/oauth/authorize?client_id=${clientId}&allow_signup=false&scope=write:repo_hook")
+        SeeOther(s"$githubUrl/login/oauth/authorize?client_id=${clientId}&allow_signup=false&scope=write:repo_hook")
     }
   }
 
@@ -64,7 +68,7 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration)(i
     val accessToken = req.session("access-token")
     val reposIds = req.body.dataParts("repo").toList
     val repoId = reposIds.collectFirst { case x@tehPattern() => x }.get
-    val userUrl = "https://api.github.com/user"
+    val userUrl = s"${githubApiUrl}/user"
     val user = Await.result(wsClient.url(userUrl)
       .withQueryString("type" -> "all", "sort" -> "updated")
       .withHeaders("Authorization" -> s"token $accessToken")
