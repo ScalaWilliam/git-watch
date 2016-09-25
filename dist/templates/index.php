@@ -6,16 +6,16 @@
 </head>
 <body>
 <h1>Git Watch</h1>
-<p><a target="_blank" href="https://github.com/AptElements/git-watch">github.com/AptElements/git-watch</a></p>
+<p><a target="_blank" href="https://github.com/ScalaWilliam/git-watch">github.com/ScalaWilliam/git-watch</a></p>
 <h2>Getting Started</h2>
 <ol>
-    <li>Set up a GitHub WebHook to <code>http://git.watch/github/</code> with an optional secret. You can also <a
+    <li>Set up a GitHub WebHook to <code>https://git.watch/github/</code> with an optional secret. You can also <a
             href="/install/">Do it automatically</a></a></li>
     <li>Install the client <code>npm install -g <a href="https://www.npmjs.com/package/gitwatch-client" target="_blank">gitwatch-client</a></code>
         (use the latest Node.js)
     </li>
-    <li>Listen for push events: <code>git-watch --url=<a href="http://git.watch/github/AptElements/git-watch"
-                                                         target="_blank">http://git.watch/github/AptElements/git-watch</a>
+    <li>Listen for push events: <code>git-watch --url=<a href="http://git.watch/github/ScalaWilliam/git-watch"
+                                                         target="_blank">http://git.watch/github/ScalaWilliam/git-watch</a>
         --push-execute='echo deploying %sha% %ref%'</code></li>
 </ol>
 <h2>Notes</h2>
@@ -28,12 +28,12 @@
 </ul>
 <h3>Deploying only <code>master</code></h3>
 <pre><code>git-watch \
---url=<a href="http://git.watch/github/AptElements/git-watch" target="_blank">http://git.watch/github/AptElements/git-watch</a> \
+--url=<a href="https://git.watch/github/ScalaWilliam/git-watch" target="_blank">https://git.watch/github/ScalaWilliam/git-watch</a> \
 --push-execute='
 ref="%ref%"
 if [ "$ref" = "refs/heads/master" ]; then
-cd /path/to/repo &&
-git pull origin $ref &&
+cd /path/to/repo &amp;&amp;
+git pull origin $ref &amp;&amp;
 echo "Updated $ref"
 fi'</code></pre>
 </body>
