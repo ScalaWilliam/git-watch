@@ -24,4 +24,6 @@ class Main @Inject()(wsClient: WSClient, configuration: Configuration)(implicit 
       .get()
       .map(r => Ok(Html(r.body)))
   }
+
+  def test = TODO
 }
