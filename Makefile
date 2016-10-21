@@ -1,17 +1,22 @@
-#!/bin/bash
+DESTDIR = /home/gw/gitwatch-0.1-SNAPSHOT
+TAR_ARCHIVE = target/universal/gitwatch-0.1-SNAPSHOT.tgz
 git-watch:
 	git-watch 2>/dev/null || npm install -g gitwatch-client
 	git-watch --url=https://git.watch/github/ScalaWilliam/git-watch --push-execute='make push-%ref% || true'
+deploy-templates:
+	rsync -av ./dist/templates/. $(DESTDIR)/templates/.
+deploy-app:
+	sbt universal:packageZipTarball
+	tar -zxvf $(TAR_ARCHIVE) -C $(DESTDIR) --strip-components 1
+	sudo -tt systemctl restart gw;
 push-refs/heads/master:
-	cd /home/gw/git-watch
-	git fetch
-	if [ $$(git diff --name-only "master" "refs/remotes/origin/master" |grep -E '^(app|conf|dist|project|build)' |grep -v 'dist/templates'|wc -l) = "0" ]; then \
+	if [ $$(git diff --name-only "master" "refs/remotes/origin/master" \
+	        | grep -E '^(app|conf|dist|project|build)' \
+	        | grep -v 'dist/templates'|wc -l) = "0" \
+	   ]; then \
 		git pull origin refs/heads/master \
-		rsync -av /home/gw/git-watch/dist/templates/. /home/gw/gitwatch-0.1-SNAPSHOT/templates/. \
+		make deploy-templates; \
 	else \
 		git pull origin refs/heads/master \
-		sbt dist \
-		cd /home/gw \
-		unzip -o /home/gw/git-watch/target/universal/gitwatch-0.1-SNAPSHOT.zip \
-		sudo -tt systemctl restart gw \
+		make deploy-app; \
 	fi
