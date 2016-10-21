@@ -10,10 +10,12 @@ deploy-app:
 	tar -zxvf $(TAR_ARCHIVE) -C $(DESTDIR) --strip-components 1
 	sudo -tt systemctl restart gw;
 push-refs/heads/master:
-	if [ $$(git diff --name-only "master" "refs/remotes/origin/master" \
-	        | grep -E '^(app|conf|dist|project|build)' \
-	        | grep -v 'dist/templates'|wc -l) = "0" \
-	   ]; then \
+    changed_files() { \
+        git diff --name-only "master" "refs/remotes/origin/master" \
+	    | grep -E '^(app|conf|dist|project|build)' \
+	    | grep -v 'dist/templates'; }; \
+	changed_files; \
+	if [ $$(changed_files | wc -l) = "0" ]; then \
 		git pull origin refs/heads/master; \
 		make deploy-templates; \
 	else \
