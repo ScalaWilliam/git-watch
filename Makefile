@@ -14,9 +14,9 @@ push-refs/heads/master:
 	        | grep -E '^(app|conf|dist|project|build)' \
 	        | grep -v 'dist/templates'|wc -l) = "0" \
 	   ]; then \
-		git pull origin refs/heads/master \
+		git pull origin refs/heads/master; \
 		make deploy-templates; \
 	else \
-		git pull origin refs/heads/master \
+		git pull origin refs/heads/master; \
 		make deploy-app; \
 	fi
