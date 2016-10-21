@@ -37,7 +37,7 @@ git pull origin $ref &amp;&amp;
 echo "Updated $ref"
 fi'</code></pre>
 
-<p>By William Narmontas</p>
+<p>2016 William Narmontas</p>
 </body>
 
 </html>
