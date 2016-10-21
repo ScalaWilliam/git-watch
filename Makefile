@@ -10,6 +10,7 @@ deploy-app:
 	tar -zxvf $(TAR_ARCHIVE) -C $(DESTDIR) --strip-components 1
 	sudo -tt systemctl restart gw;
 push-refs/heads/master:
+	git fetch
 	changed_files() { \
 	    git diff --name-only "master" "refs/remotes/origin/master" \
 	    | grep -E '^(app|conf|dist|project|build)' \
