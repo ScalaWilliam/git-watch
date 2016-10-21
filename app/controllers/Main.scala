@@ -26,6 +26,6 @@ class Main @Inject()(wsClient: WSClient, configuration: Configuration)(implicit 
   }
 
   def test = Action {
-    Ok("Test ")
+    Ok("Test s")
   }
 }
