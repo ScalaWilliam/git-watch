@@ -36,6 +36,8 @@ cd /path/to/repo &amp;&amp;
 git pull origin $ref &amp;&amp;
 echo "Updated $ref"
 fi'</code></pre>
+
+<p>By William Narmontas</p>
 </body>
 
 </html>
