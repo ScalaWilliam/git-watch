@@ -14,6 +14,7 @@ push-refs/heads/master:
 	    git diff --name-only "master" "refs/remotes/origin/master" \
 	    | grep -E '^(app|conf|dist|project|build)' \
 	    | grep -v 'dist/templates'; }; \
+	echo Changed files: \
 	changed_files; \
 	if [ $$(changed_files | wc -l) = "0" ]; then \
 		git pull origin refs/heads/master; \
