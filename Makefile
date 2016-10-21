@@ -1,7 +1,7 @@
 #!/bin/bash
 git-watch:
 	git-watch 2>/dev/null || npm install -g gitwatch-client
-	git-watch --url=https://git.watch/github/ScalaWilliam/git-work --push-execute='make push-%ref% || true'
+	git-watch --url=https://git.watch/github/ScalaWilliam/git-watch --push-execute='make push-%ref% || true'
 push-refs/heads/master:
 	cd /home/gw/git-watch
 	git fetch
