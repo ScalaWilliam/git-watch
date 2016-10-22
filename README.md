@@ -18,6 +18,13 @@ It's all rendered using XSLT.
 2. Run `make develop-frontend`. Wait for a browser window to open.
 3. Edit the stuff in `dist/content/`.
 
+## Security
+Everything is open to the world. This model is best suited for public projects. Private projects will be for later.
+
+The client-side application has explicit filters to ensure no injection takes place.
+
+If you want to ensure legitimate GitHub pushes, add `--secret=[secret you specified]`
+
 ## Licence
 
 * Client: MIT Licence.

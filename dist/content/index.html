@@ -2,38 +2,35 @@
 <html>
 <head>
     <title>Git Watch</title>
-    <link rel="stylesheet" href="static/main.css" type="text/css">
+    <link rel="stylesheet" href="static/main.css" type="text/css"/>
 </head>
 <body>
-<h1>Git Watch</h1>
-<p><a target="_blank" href="https://github.com/ScalaWilliam/git-watch">github.com/ScalaWilliam/git-watch</a></p>
-<p class="cta"><a href="/install/">Hook In</a></p>
+<header>
+    <h1><a href="/">Git Watch</a></h1>
+    <nav>
+        <ol>
+            <li id="hook-in"><a href="/install/">Log In (GitHub account required)</a></li>
+            <li><a href="https://github.com/ScalaWilliam/git-watch">GitHub Repository</a></li>
+            <li>
+                <a href="https://github.com/ScalaWilliam/git-watch/issues">Issues</a>
+            </li>
+            <li><a href="https://github.com/ScalaWilliam/git-watch/#security">Security</a></li>
+        </ol>
+    </nav>
+</header>
+
+<p>Git Watch notifies you of Push events from GitHub to enable Continuous Deployment.</p>
+
 <h2>Tutorials</h2>
 <p><a href="https://github.com/ScalaWilliam/git-watch/blob/master/tutorials/GETTINGSTARTED.md">Getting started with
     Git.Watch</a></p>
 <p><a href="https://github.com/ScalaWilliam/git-watch/blob/master/tutorials/FIREBASE.md">Deploying your static website
     to Firebase with Git.Watch on push to master</a></p>
-<p><img src="https://cloud.githubusercontent.com/assets/2464813/19617752/478fab50-986b-11e6-8056-231051759f32.gif"/></p>
-<h2>Notes</h2>
-<h3>Security</h3>
-<ul>
-    <li>The client-side application has explicit filters to ensure no injection takes place.</li>
-    <li>Everything is open to the world (client: MIT, server: GPLv3).</li>
-    <li>If you want to ensure legitimate github requests, add the <code>--secret=[secret you specified]</code> option to
-        <code>git-watch</code></li>
-</ul>
-<h3>Deploying only <code>master</code></h3>
-<pre><code>git-watch \
---url=<a href="https://git.watch/github/ScalaWilliam/git-watch" target="_blank">https://git.watch/github/ScalaWilliam/git-watch</a> \
---push-execute='
-ref="%ref%"
-if [ "$ref" = "refs/heads/master" ]; then
-cd /path/to/repo &amp;&amp;
-git pull origin $ref &amp;&amp;
-echo "Updated $ref"
-fi'</code></pre>
 
-<p>&copy; 2016 William Narmontas, Apt Elements Ltd.</p>
+<h2>Demo</h2>
+<p><img src="https://cloud.githubusercontent.com/assets/2464813/19617752/478fab50-986b-11e6-8056-231051759f32.gif"/></p>
+
+<p>&copy; 2016 <a href="https://www.scalawilliam.com/">William Narmontas</a>, Apt Elements Ltd.</p>
 </body>
 
 </html>
