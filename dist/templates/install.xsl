@@ -16,8 +16,8 @@
                     <br/>
                     <select name="repo" size="20">
                         <xsl:for-each select="repo">
-                            <option value="{string()}">
-                                <xsl:value-of select="."/>
+                            <option value="{normalize-space()}">
+                                <xsl:value-of select="normalize-space()"/>
                             </option>
                         </xsl:for-each>
                     </select>
