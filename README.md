@@ -5,20 +5,14 @@ Full tutorial at: <https://git.watch>
 
 ## Frontend changes
 
-You can edit and prototype the front-end templates separately from the Scala backend.
+It's all rendered using XSLT:
 
-All you need is PHP 7 to render the templates.
+1. In shell, run `sbt run`
+2. Go to <http://localhost:9000/>
+3. Edit the stuff in `dist/templates/`
+4. Then keep reloading :-)
 
-The templates are located in 'dist/templates/'.
-
-```bash
-cd dist/templates
-php -S localhost:8848
-```
-
-'dist/templates/static/' is served directly by nginx.
-
-'dist/templates/*' is rendered by PHP (called by Scala). We use an IoC (Inversion of Control) approach.
+As a bonus you can run it behind browser-sync.
 
 ## Licence
 
@@ -26,3 +20,5 @@ php -S localhost:8848
 * Server: GPLv3 Licence.
 * Contributions: copyright transferred to Apt Elements Ltd.
 * Copyright (2016) Apt Elements Ltd.
+
+[![Throughput Graph](https://graphs.waffle.io/ScalaWilliam/git-watch/throughput.svg)](https://waffle.io/ScalaWilliam/git-watch/metrics/throughput)
