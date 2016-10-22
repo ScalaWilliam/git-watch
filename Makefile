@@ -10,7 +10,7 @@ deploy-app:
 	tar -zxvf $(TAR_ARCHIVE) -C $(DESTDIR) --strip-components 1
 	sudo -tt systemctl restart gw;
 push-refs/heads/master:
-    git rev-parse --verify HEAD; \
+	git rev-parse --verify HEAD; \
 	SHA=$$(git rev-parse --verify HEAD); \
 	git pull origin refs/heads/master; \
 	SHA=$$SHA make deploy
