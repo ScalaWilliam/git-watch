@@ -29,6 +29,10 @@ The client-side application has explicit filters to ensure no injection takes pl
 
 If you want to ensure legitimate GitHub pushes, add `--secret=[secret you specified]`
 
+## Coding Standards
+This is not model Scala code because I hacked it together fairly quickly.
+For nice Scala code, head over to <https://github.com/ScalaWilliam/ActionFPS>.
+
 ## Licence
 
 * Client: MIT Licence.
