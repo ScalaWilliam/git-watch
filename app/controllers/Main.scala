@@ -29,6 +29,6 @@ class Main @Inject()(wsClient: WSClient, configuration: Configuration)(implicit 
   def templatesPath = configuration.underlying.getString("git.watch.templates")
 
   def test = Action {
-    Ok.sendPath(Paths.get(templatesPath, "static/main.css"))
+    Ok(RenderXML(Paths.get(templatesPath, "sample.xml")))
   }
 }
