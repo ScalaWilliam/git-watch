@@ -1,4 +1,4 @@
-# git.watch
+# [git.watch](https://git.watch)
 [![Build Status](https://travis-ci.org/ScalaWilliam/git-watch.svg?branch=master)](https://travis-ci.org/ScalaWilliam/git-watch)
 
 # Tutorials

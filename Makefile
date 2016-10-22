@@ -32,6 +32,6 @@ browser-sync:
 play-run:
 	sbt run
 develop-frontend:
-	make play-run &
-	sleep 15
-	make browser-sync
+	sbt test:compile
+	bash -c 'sleep 15 && make browser-sync' &
+	make play-run
