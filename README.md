@@ -1,5 +1,5 @@
 # git.watch
-[![Build Status](https://travis-ci.org/AptElements/git-watch.svg?branch=master)](https://travis-ci.org/AptElements/git-watch)
+[![Build Status](https://travis-ci.org/ScalaWilliam/git-watch.svg?branch=master)](https://travis-ci.org/ScalaWilliam/git-watch)
 
 # Tutorials
 
