@@ -4,7 +4,7 @@
 
     <xsl:template match="/">
         <html>
-            <title>Good</title>
+            <title>GIt Watch</title>
             <xsl:apply-templates select="*"/>
         </html>
     </xsl:template>
