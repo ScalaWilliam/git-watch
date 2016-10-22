@@ -29,6 +29,11 @@ class Main @Inject()(wsClient: WSClient, configuration: Configuration)(implicit 
   def templatesPath = configuration.underlying.getString("git.watch.templates")
 
   def test = Action {
-    Ok(RenderXML(Paths.get(templatesPath, "sample.xml")))
+    val sampleXml = s"""<?xml version="1.0" ?>
+    <?xml-stylesheet type="text/xsl" href="abc.xsl"?>
+
+    <stuff>Hello, Chaps!</stuff>"""
+
+    Ok(RenderXML(sampleXml, Paths.get(templatesPath)))
   }
 }
