@@ -32,5 +32,6 @@ browser-sync:
 play-run:
 	sbt run
 develop-frontend:
-	make browser-sync &
-	make play-run
+	make play-run &
+	sleep 15
+	make browser-sync
