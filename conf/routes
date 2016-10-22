@@ -6,5 +6,4 @@ GET         /bitbucket/:owner/:repo        @controllers.GitHub.watch(owner: Stri
 GET         /github-callback/              @controllers.InstallHooks.githubCallback
 GET         /install/                      @controllers.InstallHooks.installGet
 POST        /install/                      @controllers.InstallHooks.installPost
-GET         /test/                         @controllers.Main.test
 GET         /static/*name                  @controllers.StaticDev.get(name: String)

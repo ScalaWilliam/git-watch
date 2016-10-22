@@ -18,9 +18,9 @@ class StaticDev @Inject()(environment: Environment, configuration: Configuration
 
   require(!environment.isProd, s"Environment is ${environment}")
 
-  def templatesPath = Paths.get(configuration.underlying.getString("git.watch.templates"))
+  def contentPath = Paths.get(configuration.underlying.getString("git.watch.content"))
 
-  def staticPath = templatesPath.resolve("static")
+  def staticPath = contentPath.resolve("static")
 
   def resources = {
     import scala.collection.JavaConverters._

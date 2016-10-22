@@ -3,13 +3,13 @@
 
 Full tutorial at: <https://git.watch>
 
-## Frontend changes
+## Changing Frontend and Content
 
 It's all rendered using XSLT.
 
 1. Install `sbt`, `npm` and JDK 8.
 2. Run `make develop-frontend`.
-3. Edit the stuff in `dist/templates/`.
+3. Edit the stuff in `dist/content/`.
 
 As a bonus you can run it behind browser-sync.
 

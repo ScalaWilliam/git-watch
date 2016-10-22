@@ -17,16 +17,9 @@ class Main @Inject()(wsClient: WSClient, configuration: Configuration)(implicit 
   extends Controller {
 
   def index = Action {
-    Ok.sendPath(templatesPath.resolve("index.html"))
+    Ok.sendPath(contentPath.resolve("index.html"))
   }
 
-  def templatesPath = Paths.get(configuration.underlying.getString("git.watch.templates"))
+  def contentPath = Paths.get(configuration.underlying.getString("git.watch.content"))
 
-  def test = Action {
-    val sampleXml = s"""<?xml version="1.0" ?>
-    <?xml-stylesheet type="text/xsl" href="abc.xsl"?>
-
-    <stuff>Hello, Chaps!</stuff>"""
-    Ok(RenderXML(sampleXml, templatesPath))
-  }
 }

@@ -22,7 +22,7 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration,
 
   import concurrent.duration._
 
-  def templatesPath = Paths.get(configuration.underlying.getString("git.watch.templates"))
+  def contentPath = Paths.get(configuration.underlying.getString("git.watch.content"))
 
   def githubCallback = Action {
     req =>
@@ -36,7 +36,7 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration,
       case Some(accessToken) =>
         val reponames = Await.result(installation.repoNames(accessToken), 5.seconds)
         Ok(Html(RenderXML(
-          idRender + installXml(reponames).toString, templatesPath)))
+          idRender + installXml(reponames).toString, contentPath)))
 
       case _ =>
         installation.authorizeResult
@@ -56,7 +56,7 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration,
     val inXml = <repo-setup>
       {repoId}
     </repo-setup>
-    Ok(Html(RenderXML(idRender + inXml.toString(), templatesPath)))
+    Ok(Html(RenderXML(idRender + inXml.toString(), contentPath)))
   }
 
   def installXml(reponames: List[String]): scala.xml.Elem = {
