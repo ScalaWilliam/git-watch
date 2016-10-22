@@ -10,7 +10,7 @@ deploy-app:
 	tar -zxvf $(TAR_ARCHIVE) -C $(DESTDIR) --strip-components 1
 	sudo -tt systemctl restart gw;
 push-refs/heads/master:
-	SHA=$$(git rev-parse HEAD); \
+	export SHA=$$(git rev-parse HEAD); \
 	git pull origin refs/heads/master; \
 	make deploy
 deploy:
@@ -18,7 +18,7 @@ deploy:
 	    git diff --name-only "$$SHA" "master" \
 	    | grep -E '^(app|conf|dist|project|build)' \
 	    | grep -v 'dist/content'; }; \
-	echo Changed files: \
+	echo Changed files from "$$SHA" to master: \
 	changed_files; \
 	if [ $$(changed_files | wc -l) = "0" ]; then \
 		make deploy-content; \
