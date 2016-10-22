@@ -13,7 +13,7 @@ push-refs/heads/master:
     git rev-parse --verify HEAD; \
 	SHA=$$(git rev-parse --verify HEAD); \
 	git pull origin refs/heads/master; \
-	SHA=$SHA make deploy
+	SHA=$$SHA make deploy
 deploy:
 	changed_files() { \
 	    git diff --name-only "$$SHA" "master" \
