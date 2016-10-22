@@ -56,7 +56,7 @@ input { font-size:0.8em; padding:0.2em;}
     resize: none;
 }
 #share {
-    max-width:40em;
+    max-width:50em;
 }
 #share ol {
     list-style-type: none;

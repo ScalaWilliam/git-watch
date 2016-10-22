@@ -5,7 +5,7 @@
     <xsl:template match="repos">
         <html>
             <head>
-                <h1><a href="/">Git Watch</a></h1>
+                <title>Git Watch</title>
                 <link rel="stylesheet" href="/static/main.css" type="text/css"/>
             </head>
             <body>

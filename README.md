@@ -1,5 +1,7 @@
 # [git.watch](https://git.watch)
 [![Build Status](https://travis-ci.org/ScalaWilliam/git-watch.svg?branch=master)](https://travis-ci.org/ScalaWilliam/git-watch)
+[![Join the chat at https://gitter.im/ScalaWilliam/git-watch](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ScalaWilliam/git-watch?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Workflow](https://badge.waffle.io/ScalaWilliam/git-watch.png?label=ready&title=Ready)](https://waffle.io/ScalaWilliam/git-watch)
 
 Git Watch reacts to GitHub Push events to enable Continuous Deployment
 
