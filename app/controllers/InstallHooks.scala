@@ -36,16 +36,14 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration,
       case Some(accessToken) =>
         val reponames = Await.result(installation.repoNames(accessToken), 5.seconds)
         Ok(Html(RenderXML(
-          """<?xml-stylesheet type="text/xsl" href="id.xsl"?>
-          """ +
-            installXml(reponames).toString, templatesPath)))
+          idRender + installXml(reponames).toString, templatesPath)))
 
       case _ =>
         installation.authorizeResult
     }
   }
 
-  def idRender = """<?xml-stylesheet type="text/xsl" href="id.xsl"?>"""
+  def idRender = """<?xml-stylesheet type="text/xsl" href="install.xsl"?>"""
 
   val tehPattern = """^[A-Za-z0-9\._-]+/[A-Za-z0-9_\.-]+$""".r
 
@@ -55,40 +53,19 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration,
     val repoId = reposIds.collectFirst { case x@tehPattern() => x }.get
     Await.result(installation.installTo(accessToken, repoId), 5.seconds)
 
-    val inXml = <p>Repo
-      <code>
-        {repoId}
-      </code>
-      was set up!
-      <a href="/">Homepage</a>
-    </p>
+    val inXml = <repo-setup>
+      {repoId}
+    </repo-setup>
     Ok(Html(RenderXML(idRender + inXml.toString(), templatesPath)))
   }
 
-  def installXml(reponames: List[String]): scala.xml.Elem = <html>
-    <head>
-      <title>Git Watch</title>
-      <link rel="stylesheet" href="/static/main.css" type="text/css"/>
-    </head>
-    <body>
-      <h1>Git Watch</h1>
-      <h2>Install</h2>
-      <form name="submitter" method="post" enctype="multipart/form-data">
-        <button type="submit">Set up git.watch webhooks</button>
-        <br/>
-        <select name="repo" size="20">
-          {reponames.map { rn =>
-          <option value={rn}>
-            {rn}
-          </option>
-        }}
-        </select>
-        <hr/>
-        Other repo:
-        <input type="text" name="repo" pattern="[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/"
-               placeholder="full repository name, eg AptElements/git-watch"/>
-      </form>
-    </body>
-  </html>
+  def installXml(reponames: List[String]): scala.xml.Elem = {
+    <repos>
+      {reponames.map { r => <repo>
+      {r}
+    </repo>
+    }}
+    </repos>
+  }
 
 }

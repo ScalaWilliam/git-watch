@@ -24,3 +24,11 @@ push-refs/heads/master:
 		git pull origin refs/heads/master; \
 		make deploy-app; \
 	fi
+browser-sync:
+	browser-sync 2>/dev/null || npm install browser-sync
+	browser-sync start --proxy "localhost:9000" --files "dist/**/*"
+play-run:
+	sbt run
+develop-frontend:
+	make browser-sync &
+	make play-run
