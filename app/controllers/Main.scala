@@ -1,5 +1,6 @@
 package controllers
 
+import java.nio.file.Paths
 import javax.inject.{Inject, Singleton}
 
 import play.api.Configuration
@@ -25,7 +26,9 @@ class Main @Inject()(wsClient: WSClient, configuration: Configuration)(implicit 
       .map(r => Ok(Html(r.body)))
   }
 
+  def templatesPath = configuration.underlying.getString("git.watch.templates")
+
   def test = Action {
-    Ok("Test s")
+    Ok.sendPath(Paths.get(templatesPath, "static/main.css"))
   }
 }
