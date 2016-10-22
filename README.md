@@ -3,7 +3,15 @@
 [![Join the chat at https://gitter.im/ScalaWilliam/git-watch](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ScalaWilliam/git-watch?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Workflow](https://badge.waffle.io/ScalaWilliam/git-watch.png?label=ready&title=Ready)](https://waffle.io/ScalaWilliam/git-watch)
 
-Git Watch reacts to GitHub Push events to enable Continuous Deployment
+Git Watch reacts to GitHub Push events to enable Continuous Deployment.
+
+# Philosophy
+
+Dogfood is eaten. Git Watch uses Git Watch for its own deploys, see [Makefile](https://github.com/ScalaWilliam/git-watch/blob/master/Makefile). Each commit to master = an immediate deploy if content has been changed, and something like a 10 second deploy otherwise. 
+
+<img src="https://cloud.githubusercontent.com/assets/2464813/19618147/edc87a84-9874-11e6-9e90-ba258005b63d.png" height="80"/>
+
+Continuous Deployment works spectacularly well. It is very fast and fun to use. You put in most of the work upfront, clarify all the assumptions and then pretty much forget about it. Whereas typical projects write a lot of code and then stress about how to deploy it. I'll write an article about this later.
 
 # Tutorials
 
@@ -14,6 +22,17 @@ Git Watch reacts to GitHub Push events to enable Continuous Deployment
 
 ![asciicast](https://cloud.githubusercontent.com/assets/2464813/19617752/478fab50-986b-11e6-8056-231051759f32.gif)
 
+# Security
+Everything is open to the world. This model is best suited for public projects. Private projects will be for later.
+
+The client-side application has explicit filters to ensure no injection takes place.
+
+If you want to ensure legitimate GitHub pushes, add `--secret=[secret you specified]`
+
+# Contributing
+
+Contribution implies transfer of ownership/copyright to Apt Elements Ltd.
+
 ## Changing Frontend and Content
 
 It's all rendered using XSLT.
@@ -22,22 +41,16 @@ It's all rendered using XSLT.
 2. Run `make develop-frontend`. Wait for a browser window to open.
 3. Edit the stuff in `dist/content/`.
 
-## Security
-Everything is open to the world. This model is best suited for public projects. Private projects will be for later.
-
-The client-side application has explicit filters to ensure no injection takes place.
-
-If you want to ensure legitimate GitHub pushes, add `--secret=[secret you specified]`
-
 ## Coding Standards
 This is not model Scala code because I hacked it together fairly quickly.
 For nice Scala code, head over to <https://github.com/ScalaWilliam/ActionFPS>.
+
+Feel free to contribute to any of the tickets, including improving the design and the User Experience. There's a /lot/ of work to be done and I am very very open to new ideas.
 
 ## Licence
 
 * Client: MIT Licence.
 * Server: GPLv3 Licence.
-* Contributions: copyright transferred to Apt Elements Ltd.
-* Copyright (2016) Apt Elements Ltd.
+* Copyright (2016) Apt Elements Ltd. [William Narmontas](https://www.scalawilliam.com/)
 
 [![Throughput Graph](https://graphs.waffle.io/ScalaWilliam/git-watch/throughput.svg)](https://waffle.io/ScalaWilliam/git-watch/metrics/throughput)
