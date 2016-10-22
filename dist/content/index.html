@@ -1,8 +1,14 @@
 <!doctype html>
-<html>
+<html itemscope itemtype="http://schema.org/Product">
 <head>
     <title>Git Watch</title>
     <link rel="stylesheet" href="static/main.css" type="text/css"/>
+    <meta property="og:title" content="Git Watch"/>
+    <meta name="twitter:site" content="@ScalaWilliam"/>
+    <meta name="twitter:creator" content="@ScalaWilliam"/>
+    <meta property="og:image"
+          content="https://cloud.githubusercontent.com/assets/2464813/19618147/edc87a84-9874-11e6-9e90-ba258005b63d.png"/>
+    <meta property="og:description" content="Git Watch reacts to GitHub Push events"/>
 </head>
 <body>
 <header>
@@ -19,7 +25,37 @@
     </nav>
 </header>
 
-<p>Git Watch notifies you of Push events from GitHub to enable Continuous Deployment.</p>
+<p>Git Watch reacts to GitHub Push events to enable Continuous Deployment.</p>
+<section id="share">
+    <ol>
+        <li>
+            <a class="github-button" href="https://github.com/ScalaWilliam/git-watch" data-count-href="/ScalaWilliam/git-watch/stargazers" data-count-api="/repos/ScalaWilliam/git-watch#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star ScalaWilliam/git-watch on GitHub">Star</a>
+        </li>
+        <li>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-show-count="false">Tweet</a>
+
+        </li>
+        <li>
+            <div class="g-plusone" data-size="tall" data-annotation="none" data-width="300" data-href="https://git.watch/"></div>
+        </li>
+        <li>
+            <script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: en_US</script>
+            <script type="IN/Share" data-url="https://git.watch/" data-counter="right"></script>
+        </li>
+        <li>
+            <div data-type="xing/share" data-counter="right"></div>
+            <script>
+                ;(function (d, s) {
+                    var x = d.createElement(s),
+                            s = d.getElementsByTagName(s)[0];
+                    x.src = "https://www.xing-share.com/plugins/share.js";
+                    s.parentNode.insertBefore(x, s);
+                })(document, "script");
+            </script>
+        </li>
+    </ol>
+
+</section>
 
 <h2>Tutorials</h2>
 <p><a href="https://github.com/ScalaWilliam/git-watch/blob/master/tutorials/GETTINGSTARTED.md">Getting started with
@@ -27,10 +63,19 @@
 <p><a href="https://github.com/ScalaWilliam/git-watch/blob/master/tutorials/FIREBASE.md">Deploying your static website
     to Firebase with Git.Watch on push to master</a></p>
 
+
+<!-- Place this tag in your head or just before your close body tag. -->
+
+
 <h2>Demo</h2>
 <p><img src="https://cloud.githubusercontent.com/assets/2464813/19617752/478fab50-986b-11e6-8056-231051759f32.gif"/></p>
 
 <p>&copy; 2016 <a href="https://www.scalawilliam.com/">William Narmontas</a>, Apt Elements Ltd.</p>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 </body>
+
 
 </html>

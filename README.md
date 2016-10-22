@@ -1,6 +1,8 @@
 # [git.watch](https://git.watch)
 [![Build Status](https://travis-ci.org/ScalaWilliam/git-watch.svg?branch=master)](https://travis-ci.org/ScalaWilliam/git-watch)
 
+Git Watch reacts to GitHub Push events to enable Continuous Deployment
+
 # Tutorials
 
 * [Getting started with Git.Watch](https://github.com/ScalaWilliam/git-watch/blob/master/tutorials/GETTINGSTARTED.md)
