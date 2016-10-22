@@ -10,18 +10,19 @@ deploy-app:
 	tar -zxvf $(TAR_ARCHIVE) -C $(DESTDIR) --strip-components 1
 	sudo -tt systemctl restart gw;
 push-refs/heads/master:
-	git fetch
+	SHA=$$(git rev-parse HEAD); \
+	git pull origin refs/heads/master; \
+	make deploy
+deploy:
 	changed_files() { \
-	    git diff --name-only "master" "refs/remotes/origin/master" \
+	    git diff --name-only "$$SHA" "master" \
 	    | grep -E '^(app|conf|dist|project|build)' \
 	    | grep -v 'dist/content'; }; \
 	echo Changed files: \
 	changed_files; \
 	if [ $$(changed_files | wc -l) = "0" ]; then \
-		git pull origin refs/heads/master; \
 		make deploy-content; \
 	else \
-		git pull origin refs/heads/master; \
 		make deploy-app; \
 	fi
 browser-sync:

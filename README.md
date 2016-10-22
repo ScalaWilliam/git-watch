@@ -1,7 +1,10 @@
 # git.watch
 [![Build Status](https://travis-ci.org/AptElements/git-watch.svg?branch=master)](https://travis-ci.org/AptElements/git-watch)
 
-Full tutorial at: <https://git.watch>
+# Tutorials
+
+* [Raw tutorial](https://git.watch)
+* [Deploying your static website to Firebase with Git.Watch on push to master](https://github.com/ScalaWilliam/git-watch/blob/master/tutorials/FIREBASE.md)
 
 ## Changing Frontend and Content
 
