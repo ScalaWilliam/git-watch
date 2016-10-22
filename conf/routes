@@ -7,3 +7,5 @@ GET         /github-callback/              @controllers.InstallHooks.githubCallb
 GET         /install/                      @controllers.InstallHooks.installGet
 POST        /install/                      @controllers.InstallHooks.installPost
 GET         /static/*name                  @controllers.StaticDev.get(name: String)
+GET         /version/                      @controllers.Version.version
+
