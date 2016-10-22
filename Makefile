@@ -18,7 +18,7 @@ deploy:
 	    git diff --name-only "$$SHA" "master" \
 	    | grep -E '^(app|conf|dist|project|build)' \
 	    | grep -v 'dist/content'; }; \
-	echo Changed files from "$$SHA" to master: \
+	echo Changed files from "$$SHA" to master:; \
 	changed_files; \
 	if [ $$(changed_files | wc -l) = "0" ]; then \
 		make deploy-content; \
