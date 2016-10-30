@@ -2,12 +2,12 @@ scalaVersion := "2.11.8"
 name := "gitwatch"
 enablePlugins(PlayScala)
 
-libraryDependencies += "com.typesafe.akka" %% "akka-agent" % "2.4.4"
+libraryDependencies += "com.typesafe.akka" %% "akka-agent" % "2.4.12"
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
 libraryDependencies += "commons-codec" % "commons-codec" % "1.10"
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % "test"
 libraryDependencies += ws
-libraryDependencies += "net.sf.saxon" % "Saxon-HE" % "9.7.0-8"
+libraryDependencies += "net.sf.saxon" % "Saxon-HE" % "9.7.0-10"
 
 publishArtifact in(Compile, packageDoc) := false
 publishArtifact in packageDoc := false
