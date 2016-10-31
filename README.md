@@ -20,7 +20,7 @@ Continuous Deployment works spectacularly well. It is very fast and fun to use. 
 
 # Basic Demo
 
-![asciicast](https://cloud.githubusercontent.com/assets/2464813/19617752/478fab50-986b-11e6-8056-231051759f32.gif)
+![asciicast](https://cloud.githubusercontent.com/assets/2464813/19849322/8ac6e888-9f8d-11e6-81d5-3137c7fd940d.gif)
 
 # Security
 Everything is open to the world. This model is best suited for public projects. Private projects will be for later.
