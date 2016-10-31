@@ -18,6 +18,9 @@ if (!('url' in args.options)) {
     args.options.url = findUrl;
   }
 }
+if ( debug ) {
+  console.log("Using URL: " + args.options.url);
+}
 if (!('push-execute' in args.options)) {
   console.error("Push execute option not specified");
 }
