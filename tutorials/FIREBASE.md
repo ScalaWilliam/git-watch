@@ -15,7 +15,7 @@ deploy:
 serve:
 	firebase serve
 watch:
-    git-watch --url=https://git.watch/github/Your/repo --push-execute='make push-%ref% || true'
+    git-watch --push-execute='make push-%ref% || true'
 push-refs/heads/master:
 	git pull
 	make deploy
