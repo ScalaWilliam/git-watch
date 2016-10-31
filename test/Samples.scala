@@ -30,7 +30,6 @@ object Samples {
     HookRequest.extract(headers = headers, body = body, bodyJson = jsonBody).get
   }
 
-
   def pingSample = parseResource(getClass.getResource("/sample-ping.txt"))
 
   def pushSample = parseResource(getClass.getResource("/sample-push.txt"))

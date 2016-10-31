@@ -7,7 +7,7 @@ import scala.concurrent.Future
 /**
   * Created by me on 22/10/2016.
   */
-class DevInstallation extends Installation {
+class StubInstallation extends Installation {
   override def callbackToToken(code: String): Future[String] = Future.successful("good")
 
   override def authorizeResult: Result =

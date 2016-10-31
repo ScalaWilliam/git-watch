@@ -11,6 +11,6 @@ class InstallationChoice extends Module {
   def bindings(environment: Environment,
                configuration: Configuration) = Seq(
     if (environment.mode == Mode.Prod) bind[Installation].to[RealInstallation]
-    else bind[Installation].to[DevInstallation]
+    else bind[Installation].to[StubInstallation]
   )
 }
