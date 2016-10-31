@@ -13,7 +13,7 @@ import scala.concurrent.ExecutionContext
   * Created by me on 18/08/2016.
   */
 @Singleton
-class Main @Inject()(wsClient: WSClient, configuration: Configuration)(implicit executionContext: ExecutionContext)
+class Index @Inject()(wsClient: WSClient, configuration: Configuration)(implicit executionContext: ExecutionContext)
   extends Controller {
 
   def index = Action {

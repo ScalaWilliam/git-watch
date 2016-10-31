@@ -11,7 +11,7 @@ class DevInstallation extends Installation {
   override def callbackToToken(code: String): Future[String] = Future.successful("good")
 
   override def authorizeResult: Result =
-    SeeOther(controllers.routes.InstallHooks.installGet().url).withSession("access-token" -> "good")
+    SeeOther(controllers.github.routes.InstallHooks.installGet().url).withSession("access-token" -> "good")
 
   override def repoNames(accessToken: String): Future[List[String]] =
     Future.successful(List("ScalaWilliam/git-watch", "ScalaWilliam/git-work-content"))

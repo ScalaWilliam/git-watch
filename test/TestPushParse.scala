@@ -1,5 +1,5 @@
 
-import controllers.GitHub
+import controllers.github.EventServer
 import model.github.EventType.PushEvent
 import org.scalatest.FunSuite
 import org.scalatest.Matchers._
@@ -27,7 +27,7 @@ class TestPushParse extends FunSuite {
   }
 
   test("Watcher produces a ref event and a complete event") {
-    val watcher = GitHub.buildWatcher("AptElements/git-watch", FakeRequest(
+    val watcher = EventServer.buildWatcher("AptElements/git-watch", FakeRequest(
       method = "GET", uri = "/?event=simple-push", headers = Headers(), body = ""
     ))
 
@@ -43,14 +43,14 @@ class TestPushParse extends FunSuite {
   }
 
   test("Watcher secret fails") {
-    val watcher = GitHub.buildWatcher("AptElements/git-watch", FakeRequest(
+    val watcher = EventServer.buildWatcher("AptElements/git-watch", FakeRequest(
       method = "GET", uri = "/?event=simple-push&secret=a", headers = Headers(), body = ""
     ))
     watcher(pushSample) shouldBe empty
   }
 
   test("Watcher secret works") {
-    val watcher = GitHub.buildWatcher("AptElements/git-watch", FakeRequest(
+    val watcher = EventServer.buildWatcher("AptElements/git-watch", FakeRequest(
       method = "GET", uri = "/?event=simple-push&secret=test", headers = Headers(), body = ""
     ))
     watcher(pushSample) should have size 2

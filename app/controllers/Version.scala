@@ -5,7 +5,9 @@ import java.util.Base64
 import play.api.libs.json.{JsObject, JsString, Json}
 import play.api.mvc.{Action, Controller}
 
-
+/**
+  * Provide the current git commit SHA so we can double check a deployment.
+  */
 class Version extends Controller {
 
   def commitDescription = {

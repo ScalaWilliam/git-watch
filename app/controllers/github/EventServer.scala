@@ -1,4 +1,4 @@
-package controllers
+package controllers.github
 
 import javax.inject.{Inject, Singleton}
 
@@ -17,9 +17,8 @@ import scala.concurrent.{ExecutionContext, Future}
 /**
   * Created by me on 31/07/2016.
   */
-
 @Singleton
-class GitHub @Inject()(applicationLifecycle: ApplicationLifecycle)(implicit actorSystem: ActorSystem, executionContext: ExecutionContext) extends Controller {
+class EventServer @Inject()(applicationLifecycle: ApplicationLifecycle)(implicit actorSystem: ActorSystem, executionContext: ExecutionContext) extends Controller {
 
   val (enum, channel) = Concurrent.broadcast[Either[Unit, HookRequest]]
 
@@ -46,14 +45,14 @@ class GitHub @Inject()(applicationLifecycle: ApplicationLifecycle)(implicit acto
   }
 
   def watch(owner: String, repo: String) = Action { rq =>
-    GitHub.buildWatcher(
+    EventServer.buildWatcher(
       fullRepo = s"$owner/$repo",
       requestHeader = rq
     ) match {
       case watcher =>
         val dataSource: Source[Event, _] = {
           source.expand {
-            case Left(v) => Iterator(GitHub.keepAliveEvent)
+            case Left(v) => Iterator(EventServer.keepAliveEvent)
             case Right(hr) => watcher(hr).toIterator
           }
         }
@@ -62,7 +61,7 @@ class GitHub @Inject()(applicationLifecycle: ApplicationLifecycle)(implicit acto
   }
 }
 
-object GitHub {
+object EventServer {
   val keepAliveEvent = Event("")
 
   def buildWatcher(fullRepo: String, requestHeader: RequestHeader): HookRequest => List[Event] = {

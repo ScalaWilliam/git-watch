@@ -2,6 +2,7 @@ package controllers
 
 import java.nio.file.Paths
 
+import lib.XMLTransformer
 import org.scalatest.FunSuite
 import org.scalatest.Matchers._
 

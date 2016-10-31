@@ -1,8 +1,10 @@
-package controllers
+package controllers.github
 
 import java.nio.file.Paths
 import javax.inject.{Inject, Singleton}
 
+import controllers.github.InstallHooks._
+import lib.XMLTransformer
 import play.api.Configuration
 import play.api.libs.ws.WSClient
 import play.api.mvc.{Action, BodyParsers, Controller}
@@ -10,7 +12,6 @@ import play.twirl.api.Html
 import services.github.Installation
 
 import scala.concurrent.{Await, ExecutionContext}
-
 /**
   * Created by me on 27/08/2016.
   */
@@ -43,14 +44,10 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration,
     }
   }
 
-  def idRender = """<?xml-stylesheet type="text/xsl" href="install.xsl"?>"""
-
-  val tehPattern = """^[A-Za-z0-9\._-]+/[A-Za-z0-9_\.-]+$""".r
-
   def installPost = Action(BodyParsers.parse.multipartFormData) { req =>
     val accessToken = req.session("access-token")
     val reposIds = req.body.dataParts("repo").toList
-    val repoId = reposIds.collectFirst { case x@tehPattern() => x }.get
+    val repoId = reposIds.collectFirst { case x@validRepoPattern() => x }.get
     Await.result(installation.installTo(accessToken, repoId), 5.seconds)
 
     val inXml = <repo-setup>
@@ -68,4 +65,10 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration,
     </repos>
   }
 
+}
+
+object InstallHooks {
+  val idRender = """<?xml-stylesheet type="text/xsl" href="install.xsl"?>"""
+
+  val validRepoPattern = """^[A-Za-z0-9\._-]+/[A-Za-z0-9_\.-]+$""".r
 }

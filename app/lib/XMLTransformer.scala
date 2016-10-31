@@ -1,4 +1,4 @@
-package controllers
+package lib
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, File, InputStream}
 import java.nio.file.Path
