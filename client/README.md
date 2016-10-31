@@ -1,16 +1,11 @@
 # Git Watch (CLI)
 
-Easy automated deployments with GitHub WebHooks. Example:
+Git Watch enables continuous deployment. Simplest way to get started is:
 
-    git-watch \
-    --url=http://git.watch/github/AptElements/git-watch \
-    --push-execute='
-    ref="%ref%"
-    if [ "$ref" = "refs/heads/master" ]; then
-    cd /path/to/repo &&
-    git pull origin $ref &&
-    echo "Updated $ref"
-    fi'
+    npm install -g gitwatch-client
+    cd /your/github/repo
+    github-watch-push --push-execute='git pull'
 
+Currently we support GitHub only.
 
-Get more detail at <http://git.watch/>
+However we'd recommend using more advanced approaches, documented at <https://git.watch/>
