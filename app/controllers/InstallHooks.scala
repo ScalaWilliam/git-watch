@@ -35,7 +35,7 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration,
     req.session.get("access-token") match {
       case Some(accessToken) =>
         val reponames = Await.result(installation.repoNames(accessToken), 5.seconds)
-        Ok(Html(RenderXML(
+        Ok(Html(XMLTransformer.transform(
           idRender + installXml(reponames).toString, contentPath)))
 
       case _ =>
@@ -56,7 +56,7 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration,
     val inXml = <repo-setup>
       {repoId}
     </repo-setup>
-    Ok(Html(RenderXML(idRender + inXml.toString(), contentPath)))
+    Ok(Html(XMLTransformer.transform(idRender + inXml.toString(), contentPath)))
   }
 
   def installXml(reponames: List[String]): scala.xml.Elem = {

@@ -1,0 +1,19 @@
+package controllers
+
+import java.nio.file.Paths
+
+import org.scalatest.FunSuite
+import org.scalatest.Matchers._
+
+class RenderXMLDocumentTest extends FunSuite {
+  def idRender = """<?xml-stylesheet type="text/xsl" href="include.xsl"?>"""
+
+  test("it works") {
+    val result = XMLTransformer.transform(
+      xmlString = idRender + "<exclude><include/></exclude>",
+      rootPath = Paths.get(getClass.getResource("/include.xsl").getFile).getParent
+    )
+    result shouldEqual """<?xml version="1.0" encoding="UTF-8"?><include/>"""
+  }
+
+}

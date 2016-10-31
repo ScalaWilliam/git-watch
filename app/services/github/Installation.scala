@@ -1,6 +1,5 @@
 package services.github
 
-import com.google.inject.ImplementedBy
 import play.api.mvc.Result
 
 import scala.concurrent.Future

@@ -2,77 +2,96 @@ package services.github
 
 import javax.inject.Inject
 
-import play.api.libs.json.{JsArray, Json}
+import play.api.libs.json.{JsArray, JsValue, Json}
 import play.api.libs.ws.WSClient
 import play.api.mvc.Result
 import play.api.mvc.Results._
 import play.api.{Configuration, Logger}
 
-import scala.concurrent.duration._
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NonFatal
+import scala.async.Async.{async, await}
 
 /**
   * Created by me on 22/10/2016.
   */
 class RealInstallation @Inject()(wsClient: WSClient, configuration: Configuration)
                                 (implicit executionContext: ExecutionContext) extends Installation {
-  def githubUrl = configuration.getString("github.url").getOrElse("https://github.com")
 
-  def clientId = configuration.underlying.getString("gw.client-id")
+  protected def logger = Logger.apply(getClass)
 
-  def clientSecret = configuration.underlying.getString("gw.client-secret")
+  protected def githubApiUrl = configuration.getString("github.api-url").getOrElse("https://api.github.com")
 
-  override def callbackToToken(code: String): Future[String] = {
-    val resposeF = wsClient
-      .url(s"$githubUrl/login/oauth/access_token")
-      .withHeaders("Accept" -> "application/json")
-      .post(Map(
-        "client_id" -> Seq(clientId),
-        "code" -> Seq(code),
-        "client_secret" -> Seq(clientSecret)
-      ))
+  protected def githubUrl = configuration.getString("github.url").getOrElse("https://github.com")
 
-    resposeF.map { response => (response.json \ "access_token").as[String]
+  protected def clientId = configuration.underlying.getString("gw.client-id")
+
+  protected def clientSecret = configuration.underlying.getString("gw.client-secret")
+
+  protected def authorizeUrl = s"$githubUrl/login/oauth/authorize?client_id=${clientId}&allow_signup=false&scope=write:repo_hook"
+
+  protected def hookJson: JsValue = Json.parse {
+    """{"name": "web", "active": true, "events": [ "*"],  "config": {    "url": "https://git.watch/github/",   "content_type": "json"  }}"""
+  }
+
+  override def callbackToToken(code: String): Future[String] = async {
+    val response = await {
+      wsClient
+        .url(s"$githubUrl/login/oauth/access_token")
+        .withHeaders("Accept" -> "application/json")
+        .post(Map(
+          "client_id" -> Seq(clientId),
+          "code" -> Seq(code),
+          "client_secret" -> Seq(clientSecret)
+        ))
+    }
+    try {
+      (response.json \ "access_token").as[String]
+    }
+    catch {
+      case NonFatal(e) =>
+        throw new RuntimeException(s"Failed to find an access token for response ${response} due to $e", e)
     }
 
   }
 
   override def authorizeResult: Result = {
-    val url = s"$githubUrl/login/oauth/authorize?client_id=${clientId}&allow_signup=false&scope=write:repo_hook"
-    SeeOther(url)
+    SeeOther(authorizeUrl)
   }
 
-  def logger = Logger.apply(getClass)
-
-  def githubApiUrl = configuration.getString("github.api-url").getOrElse("https://api.github.com")
-
-  override def repoNames(accessToken: String): Future[List[String]] = {
+  override def repoNames(accessToken: String): Future[List[String]] = async {
     val userUrl = s"$githubApiUrl/user"
-    val user = Await.result(wsClient.url(userUrl).withHeaders("Authorization" -> s"token $accessToken").get(), 5.seconds)
+    val user = await(wsClient.url(userUrl).withHeaders("Authorization" -> s"token $accessToken").get())
     val reposUrl = (user.json \ "repos_url").as[String]
-    val reposJson = wsClient.url(reposUrl)
-      .withQueryString("type" -> "all", "sort" -> "updated")
-      .withHeaders("Authorization" -> s"token $accessToken")
-      .get().map(_.json)
-    reposJson.map(j => (j \\ "full_name").map(_.as[String]).toList)
+    val repos = await {
+      wsClient.url(reposUrl)
+        .withQueryString("type" -> "all", "sort" -> "updated")
+        .withHeaders("Authorization" -> s"token $accessToken")
+        .get()
+    }
+    (repos.json \\ "full_name").map(_.as[String]).toList
   }
 
-  override def installTo(accessToken: String, repoId: String): Future[Unit] = {
+  override def installTo(accessToken: String, repoId: String): Future[Unit] = async {
     val userUrl = s"${githubApiUrl}/user"
-    val user = Await.result(wsClient.url(userUrl)
-      .withQueryString("type" -> "all", "sort" -> "updated")
-      .withHeaders("Authorization" -> s"token $accessToken")
-      .get(), 5.seconds)
-    val reposUrl = (user.json \ "repos_url").as[String]
-    val reposJson = Await.result(wsClient.url(reposUrl).withHeaders("Authorization" -> s"token $accessToken").get(), 5.seconds).json
-    val reposList = reposJson.as[JsArray].value.toList
-    val hookUrl = reposList.filter(i => (i \ "full_name").as[String] == repoId).map(i => i \ "hooks_url").map(_.as[String]).head
-    val json = """{"name": "web", "active": true, "events": [ "*"],  "config": {    "url": "https://git.watch/github/",   "content_type": "json"  }}"""
-    wsClient.url(hookUrl)
-      .withHeaders("Authorization" -> s"token $accessToken")
-      .post(Json.parse(json)).map { resX =>
-      logger.info(s"user = ${user.json \ "login"} repo id = ${repoId}, accessToken = ${accessToken}, hookUrl = ${hookUrl}, result = ${resX}")
-      resX
+    val user = await {
+      wsClient.url(userUrl)
+        .withQueryString("type" -> "all", "sort" -> "updated")
+        .withHeaders("Authorization" -> s"token $accessToken")
+        .get()
     }
+    val reposUrl = (user.json \ "repos_url").as[String]
+    val repos = await {
+      wsClient.url(reposUrl).withHeaders("Authorization" -> s"token $accessToken").get()
+    }
+    val reposList = repos.json.as[JsArray].value.toList
+    val hookUrl = reposList.filter(i => (i \ "full_name").as[String] == repoId).map(i => i \ "hooks_url").map(_.as[String]).head
+    val resX = await {
+      wsClient.url(hookUrl)
+        .withHeaders("Authorization" -> s"token $accessToken")
+        .post(hookJson)
+    }
+    logger.info(s"user = ${user.json \ "login"} repo id = ${repoId}, accessToken = ${accessToken}, hookUrl = ${hookUrl}, result = ${resX}")
   }
+
 }

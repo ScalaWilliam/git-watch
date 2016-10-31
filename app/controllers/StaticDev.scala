@@ -11,7 +11,7 @@ import play.api.mvc.{Action, Controller}
 import scala.concurrent.ExecutionContext
 
 /**
-  * Created by me on 18/08/2016.
+  * Serve static files for development since we don't want to run nginx on dev machine.
   */
 class StaticDev @Inject()(environment: Environment, configuration: Configuration)(implicit executionContext: ExecutionContext)
   extends Controller {
