@@ -42,9 +42,6 @@ It's all rendered using XSLT.
 3. Edit the stuff in `dist/content/`.
 
 ## Coding Standards
-This is not model Scala code because I hacked it together fairly quickly.
-For nice Scala code, head over to <https://github.com/ScalaWilliam/ActionFPS>.
-
 Feel free to contribute to any of the tickets, including improving the design and the User Experience. There's a /lot/ of work to be done and I am very very open to new ideas.
 
 ## Licence
