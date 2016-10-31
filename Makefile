@@ -22,7 +22,6 @@ play-run:
 
 # Call back into this Makefile for each push.
 git-watch:
-	git-watch 2>/dev/null || npm install -g gitwatch-client
 	git-watch --url=https://git.watch/github/ScalaWilliam/git-watch --push-execute='make push-%ref% || true'
 
 # Only execute deploy for master
