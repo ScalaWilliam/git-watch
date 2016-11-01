@@ -28,10 +28,13 @@ class RealInstallation @Inject()(wsClient: WSClient, configuration: Configuratio
 
   protected def clientSecret = configuration.underlying.getString("gw.client-secret")
 
+  protected def publicEndpoint = configuration.underlying.getString("git.watch.public-endpoint")
+
   protected def authorizeUrl = s"$githubUrl/login/oauth/authorize?client_id=${clientId}&allow_signup=false&scope=write:repo_hook"
 
   protected def hookJson: JsValue = Json.parse {
-    """{"name": "web", "active": true, "events": [ "*"],  "config": {    "url": "https://git.watch/github/",   "content_type": "json"  }}"""
+    """{"name": "web", "active": true, "events": [ "*"],  "config": {    "url": "ENDPOINT",   "content_type": "json"  }}""".
+      replaceAllLiterally("ENDPOINT", publicEndpoint)
   }
 
   override def callbackToToken(code: String): Future[String] = async {
