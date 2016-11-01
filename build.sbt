@@ -43,3 +43,6 @@ gitCommitDescription := {
 buildInfoPackage := "gitwatch"
 buildInfoOptions += BuildInfoOption.ToJson
 lazy val gitCommitDescription = SettingKey[Option[String]]("gitCommitDescription", "Base64-encoded!")
+
+enablePlugins(RpmPlugin)
+rpmVendor := "gitwatch"

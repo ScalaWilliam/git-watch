@@ -1,6 +1,10 @@
 DESTDIR = /home/gw/gitwatch-0.1-SNAPSHOT
 TAR_ARCHIVE = target/universal/gitwatch-0.1-SNAPSHOT.tgz
 
+### Packages ###
+rpm:
+	sbt "show rpm:packageBin"
+
 ### LOCAL DEVELOPMENT ###
 
 default:
