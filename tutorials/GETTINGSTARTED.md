@@ -9,4 +9,6 @@
 git-watch --push-execute='echo "Received an event for: %sha% %ref%" && git pull && ls'
 ```
 
+On windows use `dir` instead of `ls`
+
 ![asciicast](https://cloud.githubusercontent.com/assets/2464813/19849322/8ac6e888-9f8d-11e6-81d5-3137c7fd940d.gif)
