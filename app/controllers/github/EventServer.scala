@@ -46,7 +46,7 @@ class EventServer @Inject()(applicationLifecycle: ApplicationLifecycle)(implicit
   }
 
   def watch(owner: String, repo: String) = Action { rq =>
-    Logger.info(s"Watching by ${rq.remoteAddress} ${rq.headers.get("User-Agent")}: $owner/$repo")
+    Logger.info(s"Watching by ${rq.remoteAddress} (${rq.headers.get("User-Agent")}): $owner/$repo")
 
     EventServer.buildWatcher(
       fullRepo = s"$owner/$repo",
