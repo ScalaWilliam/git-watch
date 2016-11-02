@@ -5,6 +5,7 @@ import javax.inject.{Inject, Singleton}
 import akka.actor.ActorSystem
 import akka.stream.scaladsl.Source
 import model.github._
+import play.api.Logger
 import play.api.inject.ApplicationLifecycle
 import play.api.libs.EventSource.Event
 import play.api.libs.iteratee.Concurrent
@@ -45,6 +46,7 @@ class EventServer @Inject()(applicationLifecycle: ApplicationLifecycle)(implicit
   }
 
   def watch(owner: String, repo: String) = Action { rq =>
+    Logger.info(s"Watching by ${rq.remoteAddress} ${rq.headers.get("User-Agent")}: $owner/$repo")
     EventServer.buildWatcher(
       fullRepo = s"$owner/$repo",
       requestHeader = rq
