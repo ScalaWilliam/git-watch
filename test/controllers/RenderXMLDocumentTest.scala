@@ -12,7 +12,7 @@ class RenderXMLDocumentTest extends FunSuite {
   test("it works") {
     val result = XMLTransformer.transform(
       xmlString = idRender + "<exclude><include/></exclude>",
-      rootPath = Paths.get(getClass.getResource("/include.xsl").getFile).getParent
+      rootPath = Paths.get(getClass.getResource("/").toURI)
     )
     result shouldEqual """<?xml version="1.0" encoding="UTF-8"?><include/>"""
   }
