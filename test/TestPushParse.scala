@@ -58,10 +58,3 @@ class TestPushParse extends FunSuite {
 
 }
 
-object TestPushParse {
-}
-
-
-
-
-

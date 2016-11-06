@@ -15,24 +15,18 @@ class SampleTest extends FunSuite {
   import Samples.pushSample
 
   test("Sample parses") {
-    Samples.pushSample
+    pushSample
     info(s"Push signature = ${pushSample.signature}")
-    Samples.pushSample.repositoryName shouldBe "AptElements/git-watch"
+    pushSample.repositoryName shouldBe "AptElements/git-watch"
   }
 
   test("Sample rebuilds") {
     val result = HookRequest.extract(
-      headers = Samples.pushSample.rebuildHeaders.mapValues(v => List(v)),
-      body = Samples.pushSample.body,
-      bodyJson = Samples.pushSample.bodyJson
+      headers = pushSample.rebuildHeaders.mapValues(v => List(v)),
+      body = pushSample.body,
+      bodyJson = pushSample.bodyJson
     ).get
-    result shouldEqual Samples.pushSample
+    result shouldEqual pushSample
   }
 }
-
-object SampleTest {
-
-}
-
-
 
