@@ -1,6 +1,6 @@
 # Deploying your static website to Firebase with Git.Watch on push to master
 
-Instructions are for Linux/OS X and not Windows! :-)
+Instructions are for Linux/OS X and not Windows, as we target the server side here!
 
 Firebase comes with free HTTPS/SSL and CDN, all for free. However they don't support Git.
 
