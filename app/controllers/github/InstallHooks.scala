@@ -32,11 +32,6 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration,
       SeeOther(routes.InstallHooks.installGet().url).withSession("access-token" -> accessToken)
   }
 
-  //Burt, initial attempt
-  def installGetBitbucket = Action { req =>
-    Ok("not implemented")
-  }
-
   def installGet = Action { req =>
     req.session.get("access-token") match {
       case Some(accessToken) =>
