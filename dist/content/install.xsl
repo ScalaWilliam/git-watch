@@ -74,9 +74,17 @@
                     was set up!
                     <a href="/">Go back</a>
                 </p>
-                <p>Usage:</p>
+                <p><strong>Usage</strong></p>
+                <p>Inside a Git directory:</p>
                 <textarea rows="2" class="usage">git-watch --url=https://git.watch/github/<xsl:value-of select="normalize-space()"/> \
     --push-execute='echo "Received an event for: %sha% %ref%" &amp;&amp; git pull &amp;&amp; ls'</textarea>
+                <p>Windows:</p>
+                <textarea rows="2" class="usage">git-watch --url=https://git.watch/github/<xsl:value-of select="normalize-space()"/> ^
+    "--push-execute=echo Received an event for: %sha% %ref% &amp;&amp; git pull &amp;&amp; dir"</textarea>
+                <p>Alternatively:</p>
+                <textarea rows="2" class="usage">git-watch --push-execute='echo "Received an event for: %sha% %ref%" &amp;&amp; git pull &amp;&amp; ls'</textarea>
+                <p>Windows:</p>
+                <textarea rows="2" class="usage">git-watch "--push-execute=echo Received an event for: %sha% %ref% &amp;&amp; git pull &amp;&amp; dir"</textarea>
                 <p>Debugging:</p>
                 <textarea rows="1" class="usage">curl -i https://git.watch/github/<xsl:value-of select="normalize-space()"/></textarea>
             </body>

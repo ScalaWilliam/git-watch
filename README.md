@@ -15,6 +15,7 @@ Continuous Deployment works spectacularly well. It is very fast and fun to use. 
 
 # Tutorials
 
+* [Slideshare](http://www.slideshare.net/WilliamNarmontas/git-watch)
 * [Getting started with Git.Watch](https://github.com/ScalaWilliam/git-watch/blob/master/tutorials/GETTINGSTARTED.md)
 * [Deploying your static website to Firebase with Git.Watch on push to master](https://github.com/ScalaWilliam/git-watch/blob/master/tutorials/FIREBASE.md)
 
