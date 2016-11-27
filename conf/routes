@@ -8,5 +8,5 @@ GET         /install/                      @controllers.github.InstallHooks.inst
 POST        /install/                      @controllers.github.InstallHooks.installPost
 GET         /static/*name                  @controllers.StaticDev.get(name: String)
 GET         /version/                      @controllers.Version.version
-GET         /installBitbucket/             @controllers.github.InstallHooks.installGetBitbucket
+GET         /install-Bitbucket/            @controllers.github.InstallHooks.installGetBitbucket
 
