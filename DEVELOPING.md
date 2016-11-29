@@ -1,6 +1,5 @@
 # Developing
 
-
 Install [wscat](https://www.npmjs.com/package/wscat) & then use curl to run a sample request against the app.
 
 ## Testing the websocket in command line
