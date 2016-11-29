@@ -11,7 +11,7 @@ import play.api.libs.EventSource.Event
 import play.api.libs.iteratee.Concurrent
 import play.api.libs.json.{JsObject, Json}
 import play.api.libs.streams.Streams
-import play.api.mvc.{Action, BodyParsers, Controller, RequestHeader}
+import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -60,6 +60,27 @@ class EventServer @Inject()(applicationLifecycle: ApplicationLifecycle)(implicit
           }
         }
         Ok.chunked(content = dataSource).as("text/event-stream")
+    }
+  }
+
+  private implicit val eventSerializer = Json.writes[Event]
+
+  def watchWs(owner: String, repo: String): WebSocket = WebSocket.accept[String, String] { rq =>
+    Logger.info(s"Watching WS by ${rq.remoteAddress} (${rq.headers.get("User-Agent")}): $owner/$repo")
+
+    EventServer.buildWatcher(
+      fullRepo = s"$owner/$repo",
+      requestHeader = rq
+    ) match {
+      case watcher =>
+        import akka.stream.scaladsl._
+        Flow.fromSinkAndSource(
+          sink = Sink.ignore,
+          source = source
+            .collect { case Right(r) => r }
+            .mapConcat(hr => watcher(hr))
+            .map(e => Json.toJson(e).toString())
+        )
     }
   }
 }

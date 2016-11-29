@@ -31,6 +31,7 @@ The client-side application has explicit filters to ensure no injection takes pl
 If you want to ensure legitimate GitHub pushes, add `--secret=[secret you specified]`
 
 # Contributing
+See: [DEVELOPING.md](DEVELOPING.md)
 
 Contribution implies transfer of ownership/copyright to Apt Elements Ltd.
 
