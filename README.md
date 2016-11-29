@@ -28,7 +28,7 @@ Everything is open to the world. This model is best suited for public projects. 
 
 The client-side application has explicit filters to ensure no injection takes place.
 
-If you want to ensure legitimate GitHub pushes, add `--secret=[secret you specified]`
+If you want to ensure legitimate GitHub pushes, add `--secret=[secret you specified]`. See [https://github.com/ScalaWilliam/git-watch/issues/3](https://github.com/ScalaWilliam/git-watch/issues/3)
 
 # Contributing
 See: [DEVELOPING.md](DEVELOPING.md)
