@@ -36,7 +36,7 @@
                         </xsl:for-each>
                     </select>
                     <br/>
-                    <p>Or another repo: <input type="text" name="repo" pattern="[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/"
+                    <p>Or another repo: <input type="text" name="repo" pattern="[A-Za-z0-9_-]+/[A-Za-z0-9_-]+"
                                                placeholder="full repository name, eg AptElements/git-watch"/></p>
                     <button type="submit">Set up git.watch webhooks</button>
                 </form>
