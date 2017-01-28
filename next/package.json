@@ -10,6 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "run": "node ./bin/git-watch.js",
     "test-run": "node ./bin/git-watch.js --execute='date'",
+    "test-run-server": "node ./bin/git-watch.js --execute='date' --server=true",
     "watch-test": "mocha tests --recursive --watch"
   },
   "repository": {
@@ -33,6 +34,7 @@
   "dependencies": {
     "argv": "0.0.2",
     "async-polling": "^0.2.1",
+    "githubhook": "^1.7.1",
     "shelljs": "^0.7.3"
   },
   "devDependencies": {

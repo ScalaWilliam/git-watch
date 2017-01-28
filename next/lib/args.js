@@ -16,6 +16,11 @@ module.exports = {
             'description': 'Command to execute on trigger',
             'example': "--execute='echo got it!'"
         }
-    )
+    ).option({
+      'name': 'server',
+      'short': 's',
+      'type': 'boolean',
+      'description': "Whether to use nodejs server"
+    })
 };
 // todo server mode + secret if in server mode
