@@ -1,0 +1,41 @@
+{
+  "bin": {
+    "git-watch": "bin/git-watch.js"
+  },
+  "name": "gitwatch-client",
+  "version": "2.0.0",
+  "description": "Poll for changes and receive webhook events for your Git repository",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run": "node ./bin/git-watch.js",
+    "test-run": "node ./bin/git-watch.js --execute='echo hello'",
+    "watch-test": "mocha tests --recursive --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ScalaWilliam/git-watch.git"
+  },
+  "keywords": [
+    "git",
+    "watch",
+    "bitbucket",
+    "github",
+    "eventsource"
+  ],
+  "preferGlobal": true,
+  "author": "William Vykintas Narmontas",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ScalaWilliam/git-watch/issues"
+  },
+  "homepage": "https://github.com/ScalaWilliam/git-watch",
+  "dependencies": {
+    "argv": "0.0.2",
+    "async-polling": "^0.2.1",
+    "shelljs": "^0.7.3"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0"
+  }
+}
