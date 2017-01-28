@@ -17,6 +17,7 @@ var secondsInMinute = 60;
 var pollIntervalMillis = pollIntervalMinutes * secondsInMinute * millisInSecond;
 var executeCommand = args.options['execute'];
 function run() {
+  console.log("Executing:", executeCommand);
   shell.exec(executeCommand);
 };
 AsyncPolling(function (end) {
