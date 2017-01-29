@@ -27,7 +27,34 @@ github.listen();
 github.on('push', function (repo, ref, data) {
   // console.log('received event', arguments);
   run();
-});}
+});} else {
+  var WebSocket = require('ws');
+  function conn_ws() {
+    console.log("Connecting as a client to another ws server.");
+    var ws;
+    try {
+      ws = new WebSocket("ws://localhost:8001", function() {
+        console.log("WAT", arguments);
+      })
+    } catch (e) {
+      console.log("Could not connect for WS, will do in 5 seconds.");
+      setTimeout(conn_ws, 5000);
+      return;
+    }
+    ws.on('error', function(data) {
+      console.log("Err", data);
+    })
+  ws.on('message', function(data, flags) {
+    run();
+  });
+  ws.on('close', function close() {
+    console.log('disconnected, attempting reconnect');
+    conn_ws();
+  });
+}
+conn_ws();
+
+}
 
 function run() {
   console.log("Executing:", executeCommand);

@@ -21,6 +21,11 @@ module.exports = {
       'short': 's',
       'type': 'boolean',
       'description': "Whether to use nodejs server"
+    }).option({
+      'name': 'ws-server',
+      'short': 'w',
+      'type': 'boolean',
+      'description': "Whether to provide a websocket server to receive events from"
     })
 };
 // todo server mode + secret if in server mode
