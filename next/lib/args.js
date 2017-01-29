@@ -3,11 +3,11 @@ var argv = require('argv');
 module.exports = {
   args: argv
     .option({
-            'name': 'poll-interval',
+            'name': 'poll',
             'short': 'p',
             'type': 'int',
             'description': 'Poll interval in minutes',
-            'example': '--poll-interval=5'
+            'example': '--poll=5'
         }
     ).option({
             'name': 'execute',
