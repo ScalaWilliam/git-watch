@@ -44,7 +44,7 @@ object ExtractEvent {
     for {
       eventType <- request.headers.get("X-GitHub-Event")
       repositoryUrls = urlKeys.flatMap { key =>
-        (request.body \ "repository" \ "key").asOpt[String]
+        (request.body \ "repository" \ key).asOpt[String]
       }
       if repositoryUrls.nonEmpty
     } yield ExtractEvent(repositoryUrls = repositoryUrls, eventType = eventType)
