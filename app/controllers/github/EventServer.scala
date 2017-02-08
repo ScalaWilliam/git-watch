@@ -1,5 +1,6 @@
 package controllers.github
 
+import java.time.format.DateTimeFormatter
 import javax.inject.{Inject, Singleton}
 
 import akka.actor.ActorSystem
@@ -14,26 +15,50 @@ import play.api.libs.streams.Streams
 import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
+import concurrent.duration._
 
 /**
   * Created by me on 31/07/2016.
   */
 @Singleton
-class EventServer @Inject()(applicationLifecycle: ApplicationLifecycle)(implicit actorSystem: ActorSystem, executionContext: ExecutionContext) extends Controller {
+class EventServer @Inject()(applicationLifecycle: ApplicationLifecycle)
+                           (implicit actorSystem: ActorSystem,
+                            executionContext: ExecutionContext) extends Controller {
 
   val (enum, channel) = Concurrent.broadcast[Either[Unit, HookRequest]]
+  val (newEnum, newChannel) = Concurrent.broadcast[Either[Unit, ExtractEvent]]
 
-  import concurrent.duration._
-
-  val keepAlive = actorSystem.scheduler.schedule(1.second, 5.seconds) {
+  val keepAlive = actorSystem.scheduler.schedule(1.second, 10.seconds) {
     channel.push(Left(()))
+    newChannel.push(Left(()))
   }
 
   applicationLifecycle.addStopHook(() => Future.successful(keepAlive.cancel()))
 
   def source = Source.fromPublisher(Streams.enumeratorToPublisher(enum))
 
+  def sourceAll = Source.fromPublisher(Streams.enumeratorToPublisher(newEnum))
+
+  def allEvents() = Action {
+    val dataSource: Source[Event, _] = {
+      sourceAll.expand {
+        case Left(v) => Iterator(EventServer.keepAliveEvent)
+        case Right(hr) => hr.repositoryUrls.map { url =>
+          Event(
+            id = None,
+            name = Some(hr.eventType),
+            data = url
+          )
+        }.toIterator
+      }
+    }
+    Ok.chunked(content = dataSource).as("text/event-stream")
+  }
+
   def push = Action(BodyParsers.parse.tolerantText) { request =>
+    ExtractEvent.fromJsonRequest(request.map(Json.parse)).foreach { extractEvent =>
+      newChannel.push(Right(extractEvent))
+    }
     val bodyText = request.body
     val jsonBody = Json.parse(bodyText)
     val hr = HookRequest.extract(
@@ -55,7 +80,7 @@ class EventServer @Inject()(applicationLifecycle: ApplicationLifecycle)(implicit
       case watcher =>
         val dataSource: Source[Event, _] = {
           source.expand {
-            case Left(v) => Iterator(EventServer.keepAliveEvent)
+            case Left(_) => Iterator(EventServer.keepAliveEvent)
             case Right(hr) => watcher(hr).toIterator
           }
         }

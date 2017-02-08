@@ -21,7 +21,6 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration,
                              installation: Installation)(implicit executionContext: ExecutionContext)
   extends Controller {
 
-
   import concurrent.duration._
 
   def contentPath = Paths.get(configuration.underlying.getString("git.watch.content"))

@@ -10,3 +10,4 @@ POST        /install/                      @controllers.github.InstallHooks.inst
 GET         /static/*name                  @controllers.StaticDev.get(name: String)
 GET         /version/                      @controllers.Version.version
 
+GET         /events/                       @controllers.github.EventServer.allEvents
