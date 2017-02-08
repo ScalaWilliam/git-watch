@@ -7,7 +7,7 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
 libraryDependencies += "commons-codec" % "commons-codec" % "1.10"
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % "test"
 libraryDependencies += ws
-libraryDependencies += "net.sf.saxon" % "Saxon-HE" % "9.7.0-10"
+libraryDependencies += "org.jsoup" % "jsoup" % "1.10.2"
 libraryDependencies += "org.scala-lang.modules" %% "scala-async" % "0.9.6"
 
 publishArtifact in(Compile, packageDoc) := false

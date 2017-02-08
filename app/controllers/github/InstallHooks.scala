@@ -4,7 +4,7 @@ import java.nio.file.Paths
 import javax.inject.{Inject, Singleton}
 
 import controllers.github.InstallHooks._
-import lib.XMLTransformer
+import org.jsoup.Jsoup
 import play.api.Configuration
 import play.api.libs.ws.WSClient
 import play.api.mvc.{Action, BodyParsers, Controller}
@@ -12,6 +12,7 @@ import play.twirl.api.Html
 import services.github.Installation
 
 import scala.concurrent.{Await, ExecutionContext}
+
 /**
   * Created by me on 27/08/2016.
   */
@@ -36,9 +37,16 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration,
     req.session.get("access-token") match {
       case Some(accessToken) =>
         val reponames = Await.result(installation.repoNames(accessToken), 5.seconds)
-        Ok(Html(XMLTransformer.transform(
-          idRender + installXml(reponames).toString, contentPath)))
-
+        val doc = Jsoup.parse(contentPath.resolve("repos.html").toFile, "UTF-8")
+        val options = doc.select("option")
+        val firstOption = options.first()
+        reponames.map { name =>
+          val opt = firstOption.clone()
+          opt.text(name).attr("value", name)
+          opt
+        }.foreach(firstOption.parent().appendChild)
+        options.remove()
+        Ok(Html(doc.html()))
       case _ =>
         installation.authorizeResult
     }
@@ -50,25 +58,17 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration,
     val repoId = reposIds.collectFirst { case x@validRepoPattern() => x }.get
     Await.result(installation.installTo(accessToken, repoId), 5.seconds)
 
-    val inXml = <repo-setup>
-      {repoId}
-    </repo-setup>
-    Ok(Html(XMLTransformer.transform(idRender + inXml.toString(), contentPath)))
+    val doc = Jsoup.parse(contentPath.resolve("repo-setup.html").toFile, "UTF-8")
+    import collection.JavaConverters._
+    doc.select("repo-name").asScala.foreach { el => el.text(repoId) }
+    doc.select("textarea").asScala.foreach { ta => ta.text(ta.text().replaceAllLiterally("{{repo-name}}", repoId)) }
+    Ok(Html(doc.html()))
   }
 
-  def installXml(reponames: List[String]): scala.xml.Elem = {
-    <repos>
-      {reponames.map { r => <repo>
-      {r}
-    </repo>
-    }}
-    </repos>
-  }
 
 }
 
 object InstallHooks {
-  val idRender = """<?xml-stylesheet type="text/xsl" href="install.xsl"?>"""
 
   val validRepoPattern = """^[A-Za-z0-9\._-]+/[A-Za-z0-9_\.-]+$""".r
 }

@@ -1,0 +1,35 @@
+<html>
+<head>
+    <title>Git Watch</title>
+    <link rel="stylesheet" href="/static/main.css" type="text/css"/>
+</head>
+<body>
+<header>
+    <h1>Git Watch</h1>
+    <nav>
+        <ol>
+            <li>
+                <a href="https://github.com/ScalaWilliam/git-watch">GitHub Repository</a>
+            </li>
+            <li>
+                <a href="https://github.com/ScalaWilliam/git-watch/issues">Issues</a>
+            </li>
+            <li>
+                <a href="https://github.com/ScalaWilliam/git-watch/#security">Security</a>
+            </li>
+        </ol>
+    </nav>
+</header>
+
+<h2>Install</h2>
+<form name="submitter" method="post" enctype="multipart/form-data">
+    <select name="repo" size="20">
+        <option value="some/repo">some/repo</option>
+    </select>
+    <br/>
+    <p>Or another repo: <input type="text" name="repo" placeholder="full repository name, eg AptElements/git-watch"/>
+    </p>
+    <button type="submit">Set up git.watch webhooks</button>
+</form>
+</body>
+</html>
