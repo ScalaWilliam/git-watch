@@ -1,15 +1,13 @@
 {
   "bin": {
-    "github-watch-push": "bin/github-watch-push.js",
     "git-watch": "bin/github-watch-push.js"
   },
   "name": "gitwatch-client",
-  "version": "1.0.4",
-  "description": "",
-  "main": "app.js",
+  "version": "2.0.0",
+  "description": "Git Watch: watch your GitHub/BitBucket/GitLab repository",
+  "main": "bin/git-watch.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "legacy-run": "node ./bin/github-watch-push.js --url=https://git.watch/github/ScalaWilliam/git-watch --push-execute='echo Received an event for: %sha% %ref%'",
     "watch-test": "mocha tests --recursive --watch"
   },
   "repository": {
@@ -31,9 +29,9 @@
   },
   "homepage": "https://github.com/AptElements/git-watch#readme",
   "dependencies": {
-    "argv": "0.0.2",
     "eventsource": "^0.2.1",
-    "shelljs": "^0.7.3"
+    "shelljs": "^0.7.3",
+    "yargs": "^6.6.0"
   },
   "devDependencies": {
     "chai": "^3.5.0"

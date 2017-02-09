@@ -2,6 +2,7 @@ package model.github
 
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{BodyParser, BodyParsers, Request}
+import play.api.mvc.Results._
 
 import scala.concurrent.ExecutionContext
 import scala.util.Try
@@ -9,17 +10,14 @@ import scala.util.Try
 /**
   * Created by me on 08/02/2017.
   */
-case class ExtractEvent(repositoryUrl: String) {
+case class PushEvent(repositoryUrl: String) {
 
 }
 
-object ExtractEvent {
+object PushEvent {
 
   private def urlEncodedParser(implicit executionContext: ExecutionContext) = {
     BodyParsers.parse.urlFormEncoded.validate { map =>
-      import play.api.mvc.Results._
-      println(map)
-      
       map
         .get("payload")
         .flatMap(_.headOption)
@@ -42,31 +40,31 @@ object ExtractEvent {
   }
 
   case class AtRequest(request: Request[JsValue]) {
-    def githubEvent: Option[ExtractEvent] = {
+    def githubEvent: Option[PushEvent] = {
       for {
         eventType <- request.headers.get("X-GitHub-Event")
         if "push" == eventType
         repositoryUri <- (request.body \ "repository" \ "html_url").asOpt[String]
-      } yield ExtractEvent(repositoryUri)
+      } yield PushEvent(repositoryUri)
     }
 
-    def bitbucketEvent: Option[ExtractEvent] = {
+    def bitbucketEvent: Option[PushEvent] = {
       for {
         eventType <- request.headers.get("X-Event-Key")
         if "repo:push" == eventType
         repositoryUri <- (request.body \ "repository" \ "links" \ "html" \ "href").asOpt[String]
-      } yield ExtractEvent(repositoryUri)
+      } yield PushEvent(repositoryUri)
     }
 
-    def gitlabEvent: Option[ExtractEvent] = {
+    def gitlabEvent: Option[PushEvent] = {
       for {
         eventType <- request.headers.get("X-Gitlab-Event")
         if "Push Hook" == eventType
         repositoryUrl <- (request.body \ "repository" \ "homepage").asOpt[String]
-      } yield ExtractEvent(repositoryUrl)
+      } yield PushEvent(repositoryUrl)
     }
 
-    def anyEvent: Option[ExtractEvent] = {
+    def anyEvent: Option[PushEvent] = {
       githubEvent orElse bitbucketEvent orElse gitlabEvent
     }
   }

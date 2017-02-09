@@ -27,7 +27,7 @@ class EventServer @Inject()(applicationLifecycle: ApplicationLifecycle)
                             executionContext: ExecutionContext) extends Controller {
 
   val (enum, channel) = Concurrent.broadcast[HookRequest]
-  val (newEnum, newChannel) = Concurrent.broadcast[ExtractEvent]
+  val (newEnum, newChannel) = Concurrent.broadcast[PushEvent]
 
   def source = Source.fromPublisher(Streams.enumeratorToPublisher(enum))
 
@@ -46,8 +46,8 @@ class EventServer @Inject()(applicationLifecycle: ApplicationLifecycle)
     Ok.chunked(content = dataSource).as("text/event-stream")
   }
 
-  def push = Action(ExtractEvent.combinedParser) { request =>
-    ExtractEvent.AtRequest(request).anyEvent.foreach { extractEvent =>
+  def push = Action(PushEvent.combinedParser) { request =>
+    PushEvent.AtRequest(request).anyEvent.foreach { extractEvent =>
       newChannel.push(extractEvent)
     }
     val jsonBody = request.body

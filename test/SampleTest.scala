@@ -1,4 +1,4 @@
-import model.github.ExtractEvent
+import model.github.PushEvent$
 import org.scalatest.FunSuite
 import org.scalatest.Matchers._
 import org.scalatest.OptionValues._
@@ -29,7 +29,7 @@ class SampleTest extends FunSuite {
     test(s"${platformName} sample works") {
       val resource = s"/${platformName.toLowerCase}-push.request"
       withClue(s"Resource: ${resource}") {
-        ExtractEvent
+        PushEvent
           .AtRequest {
             Samples.fromRequest(Source.fromURL(getClass.getResource(resource)))
           }
