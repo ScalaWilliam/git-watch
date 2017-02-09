@@ -4,10 +4,10 @@ var shelljs = require("shelljs");
 var argv = require('yargs').boolean('i').default({
     "u": 'https://git.watch/events/',
     "x": 'make push',
-    "i": true
+    "i": false
 }).describe('u', "Event URL.")
     .describe('x', "Command to execute on push.")
-    .describe('i', "Skip initial execute.")
+    .describe('i', "Execute on launch.")
     .help('h')
     .alias('h', 'help')
     .epilog("https://git.watch/\nhttps://www.scalawilliam.com/")
