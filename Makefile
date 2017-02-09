@@ -54,4 +54,4 @@ deploy-app:
 	sudo -tt systemctl restart gw
 push:
 	git remote update
-	if [[ $(git diff origin/master) != "" ]]; then make push-refs/heads/master; fi
+	if [[ $$(git diff origin/master) != "" ]]; then make push-refs/heads/master; fi
