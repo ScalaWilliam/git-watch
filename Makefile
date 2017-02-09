@@ -29,7 +29,7 @@ git-watch:
 push-refs/heads/master:
 	git rev-parse --verify HEAD; \
 	SHA=$$(git rev-parse --verify HEAD); \
-	git pull origin refs/heads/master; \
+	git merge; \
 	SHA=$$SHA make deploy
 
 # We do a diff to determine whether to redeploy the whole app
@@ -52,3 +52,6 @@ deploy-app:
 	sbt universal:packageZipTarball
 	tar -zxvf $(TAR_ARCHIVE) -C $(DESTDIR) --strip-components 1
 	sudo -tt systemctl restart gw
+push:
+	git remote update
+	if [[ $(git diff origin/master) != "" ]]; then make push-refs/heads/master; fi
