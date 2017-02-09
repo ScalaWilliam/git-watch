@@ -3,7 +3,7 @@
     "git-watch": "bin/git-watch.js"
   },
   "name": "gitwatch-client",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Git Watch: watch your GitHub/BitBucket/GitLab repository",
   "main": "bin/git-watch.js",
   "scripts": {
