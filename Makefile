@@ -29,7 +29,7 @@ git-watch:
 push-refs/heads/master:
 	git rev-parse --verify HEAD; \
 	SHA=$$(git rev-parse --verify HEAD); \
-	git merge; \
+	git merge origin/master; \
 	SHA=$$SHA make deploy
 
 # We do a diff to determine whether to redeploy the whole app
