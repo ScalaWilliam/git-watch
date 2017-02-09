@@ -1,0 +1,4 @@
+.PHONY: push
+
+push:
+	git pull

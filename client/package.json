@@ -30,7 +30,7 @@
   "homepage": "https://github.com/AptElements/git-watch#readme",
   "dependencies": {
     "eventsource": "^0.2.1",
-    "shelljs": "^0.7.3",
+    "shelljs": "^0.7.6",
     "yargs": "^6.6.0"
   },
   "devDependencies": {

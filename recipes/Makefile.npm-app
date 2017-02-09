@@ -1,0 +1,26 @@
+PID_FILE = .pid
+
+.PHONY: \
+	watch \
+	kill \
+	run \
+	run-pull \
+	push-run \
+	pull \
+	push
+
+kill:
+	kill $$(cat $(PID_FILE)) || true
+	rm -f $(PID_FILE)
+
+run: kill
+	npm install
+	{ npm run app & echo $$! > $(PID_FILE); }
+
+pull:
+	git pull
+
+# Hack to pull first & then run.
+run-pull: pull run
+push-run: run-pull pull
+push: pull run-pull
