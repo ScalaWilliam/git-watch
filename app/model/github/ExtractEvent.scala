@@ -18,6 +18,8 @@ object ExtractEvent {
   private def urlEncodedParser(implicit executionContext: ExecutionContext) = {
     BodyParsers.parse.urlFormEncoded.validate { map =>
       import play.api.mvc.Results._
+      println(map)
+      
       map
         .get("payload")
         .flatMap(_.headOption)

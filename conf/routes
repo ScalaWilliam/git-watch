@@ -1,4 +1,5 @@
 GET         /                              @controllers.Index.index
+POST        /                              @controllers.github.EventServer.push
 POST        /github/                       @controllers.github.EventServer.push
 GET         /github/:owner/:repo           @controllers.github.EventServer.watch(owner: String, repo: String)
 GET         /events-ws/                    @controllers.github.EventServer.allEventsWs

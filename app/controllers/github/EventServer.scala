@@ -46,15 +46,14 @@ class EventServer @Inject()(applicationLifecycle: ApplicationLifecycle)
     Ok.chunked(content = dataSource).as("text/event-stream")
   }
 
-  def push = Action(BodyParsers.parse.tolerantText) { request =>
-    ExtractEvent.AtRequest(request.map(Json.parse)).anyEvent.foreach { extractEvent =>
+  def push = Action(ExtractEvent.combinedParser) { request =>
+    ExtractEvent.AtRequest(request).anyEvent.foreach { extractEvent =>
       newChannel.push(extractEvent)
     }
-    val bodyText = request.body
-    val jsonBody = Json.parse(bodyText)
+    val jsonBody = request.body
     val hr = HookRequest.extract(
       headers = request.headers.toMap.mapValues(_.toList),
-      body = bodyText,
+      body = jsonBody.toString,
       bodyJson = jsonBody.asInstanceOf[JsObject]
     ).get
     channel.push(hr)
