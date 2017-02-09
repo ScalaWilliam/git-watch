@@ -25,6 +25,7 @@ class EventServer @Inject()(applicationLifecycle: ApplicationLifecycle)
                            (implicit actorSystem: ActorSystem,
                             executionContext: ExecutionContext) extends Controller {
 
+
   Logger.info("Initialized EventServer...")
 
 
