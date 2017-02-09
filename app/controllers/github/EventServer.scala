@@ -16,6 +16,8 @@ import play.api.mvc._
 import scala.concurrent.{ExecutionContext, Future}
 import concurrent.duration._
 
+import akka.stream.scaladsl._
+
 /**
   * Created by me on 31/07/2016.
   */
@@ -24,15 +26,8 @@ class EventServer @Inject()(applicationLifecycle: ApplicationLifecycle)
                            (implicit actorSystem: ActorSystem,
                             executionContext: ExecutionContext) extends Controller {
 
-  val (enum, channel) = Concurrent.broadcast[Either[Unit, HookRequest]]
-  val (newEnum, newChannel) = Concurrent.broadcast[Either[Unit, ExtractEvent]]
-
-  val keepAlive = actorSystem.scheduler.schedule(1.second, 10.seconds) {
-    channel.push(Left(()))
-    newChannel.push(Left(()))
-  }
-
-  applicationLifecycle.addStopHook(() => Future.successful(keepAlive.cancel()))
+  val (enum, channel) = Concurrent.broadcast[HookRequest]
+  val (newEnum, newChannel) = Concurrent.broadcast[ExtractEvent]
 
   def source = Source.fromPublisher(Streams.enumeratorToPublisher(enum))
 
@@ -40,22 +35,20 @@ class EventServer @Inject()(applicationLifecycle: ApplicationLifecycle)
 
   def allEvents() = Action {
     val dataSource: Source[Event, _] = {
-      sourceAll.expand {
-        case Left(v) => Iterator(EventServer.keepAliveEvent)
-        case Right(hr) =>
-          Iterator(Event(
-            id = None,
-            name = Some("push"),
-            data = hr.repositoryUrl
-          ))
-      }
+      sourceAll.map { hr =>
+        Event(
+          id = None,
+          name = Some("push"),
+          data = hr.repositoryUrl
+        )
+      }.merge(EventServer.keepAliveSource)
     }
     Ok.chunked(content = dataSource).as("text/event-stream")
   }
 
   def push = Action(BodyParsers.parse.tolerantText) { request =>
     ExtractEvent.AtRequest(request.map(Json.parse)).anyEvent.foreach { extractEvent =>
-      newChannel.push(Right(extractEvent))
+      newChannel.push(extractEvent)
     }
     val bodyText = request.body
     val jsonBody = Json.parse(bodyText)
@@ -64,52 +57,34 @@ class EventServer @Inject()(applicationLifecycle: ApplicationLifecycle)
       body = bodyText,
       bodyJson = jsonBody.asInstanceOf[JsObject]
     ).get
-    channel.push(Right(hr))
+    channel.push(hr)
     Ok("Got it, thanks.")
   }
 
   def watch(owner: String, repo: String) = Action { rq =>
     Logger.info(s"Watching by ${rq.remoteAddress} (${rq.headers.get("User-Agent")}): $owner/$repo")
 
-    EventServer.buildWatcher(
+    val watcher = EventServer.buildWatcher(
       fullRepo = s"$owner/$repo",
       requestHeader = rq
-    ) match {
-      case watcher =>
-        val dataSource: Source[Event, _] = {
-          source.expand {
-            case Left(_) => Iterator(EventServer.keepAliveEvent)
-            case Right(hr) => watcher(hr).toIterator
-          }
-        }
-        Ok.chunked(content = dataSource).as("text/event-stream")
-    }
+    )
+    Ok.chunked(content = source.mapConcat(watcher).merge(EventServer.keepAliveSource)).as("text/event-stream")
   }
 
   private implicit val eventSerializer = Json.writes[Event]
 
-  def watchWs(owner: String, repo: String): WebSocket = WebSocket.accept[String, String] { rq =>
-    Logger.info(s"Watching WS by ${rq.remoteAddress} (${rq.headers.get("User-Agent")}): $owner/$repo")
-
-    EventServer.buildWatcher(
-      fullRepo = s"$owner/$repo",
-      requestHeader = rq
-    ) match {
-      case watcher =>
-        import akka.stream.scaladsl._
-        Flow.fromSinkAndSource(
-          sink = Sink.ignore,
-          source = source
-            .collect { case Right(r) => r }
-            .mapConcat(hr => watcher(hr))
-            .map(e => Json.toJson(e).toString())
-        )
-    }
+  def allEventsWs: WebSocket = WebSocket.accept[String, String] { rq =>
+    Flow.fromSinkAndSource(
+      sink = Sink.ignore,
+      source = sourceAll.map(e => e.repositoryUrl)
+    )
   }
 }
 
 object EventServer {
   val keepAliveEvent = Event("")
+
+  val keepAliveSource = Source.tick(10.seconds, 10.seconds, keepAliveEvent)
 
   def buildWatcher(fullRepo: String, requestHeader: RequestHeader): HookRequest => List[Event] = {
     val ws = WatchingSetting(repositoryName = fullRepo, secret = requestHeader.getQueryString("secret"))

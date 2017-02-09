@@ -1,7 +1,7 @@
 GET         /                              @controllers.Index.index
 POST        /github/                       @controllers.github.EventServer.push
 GET         /github/:owner/:repo           @controllers.github.EventServer.watch(owner: String, repo: String)
-GET         /ws/github/:owner/:repo        @controllers.github.EventServer.watchWs(owner: String, repo: String)
+GET         /events-ws/                    @controllers.github.EventServer.allEventsWs
 POST        /bitbucket/                    @controllers.github.EventServer.push
 GET         /bitbucket/:owner/:repo        @controllers.github.EventServer.watch(owner: String, repo: String)
 GET         /github-callback/              @controllers.github.InstallHooks.githubCallback
