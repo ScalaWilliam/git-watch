@@ -36,6 +36,6 @@ es.addEventListener('push', function (e) {
         console.log("Received event: ", e);
         console.log("Repository URL: ", repositoryUrl);
         console.log("Executing: " + argv.execute);
-        shell.exec(argv.execute);
+        shelljs.exec(argv.execute);
     }
 });
