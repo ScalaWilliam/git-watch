@@ -1,6 +1,5 @@
 package controllers.github
 
-import java.time.format.DateTimeFormatter
 import javax.inject.{Inject, Singleton}
 
 import akka.actor.ActorSystem
@@ -43,20 +42,19 @@ class EventServer @Inject()(applicationLifecycle: ApplicationLifecycle)
     val dataSource: Source[Event, _] = {
       sourceAll.expand {
         case Left(v) => Iterator(EventServer.keepAliveEvent)
-        case Right(hr) => hr.repositoryUrls.map { url =>
-          Event(
+        case Right(hr) =>
+          Iterator(Event(
             id = None,
-            name = Some(hr.eventType),
-            data = url
-          )
-        }.toIterator
+            name = Some("push"),
+            data = hr.repositoryUrl
+          ))
       }
     }
     Ok.chunked(content = dataSource).as("text/event-stream")
   }
 
   def push = Action(BodyParsers.parse.tolerantText) { request =>
-    ExtractEvent.fromJsonRequest(request.map(Json.parse)).foreach { extractEvent =>
+    ExtractEvent.AtRequest(request.map(Json.parse)).anyEvent.foreach { extractEvent =>
       newChannel.push(Right(extractEvent))
     }
     val bodyText = request.body

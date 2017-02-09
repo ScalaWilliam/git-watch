@@ -1,0 +1,57 @@
+{
+  "object_kind": "push",
+  "event_name": "push",
+  "before": "0000000000000000000000000000000000000000",
+  "after": "ac9708d7795302ae662a1f109afad8ebe246b52f",
+  "ref": "refs/heads/master",
+  "checkout_sha": "ac9708d7795302ae662a1f109afad8ebe246b52f",
+  "message": null,
+  "user_id": 612884,
+  "user_name": "Vykintas Narmontas (William)",
+  "user_email": "me@vynar.com",
+  "user_avatar": "https://secure.gravatar.com/avatar/8742b8bf64c50793e0fbdfd950b45415?s=80\u0026d=identicon",
+  "project_id": 2661144,
+  "project": {
+    "name": "test-project",
+    "description": "",
+    "web_url": "https://gitlab.com/ScalaWilliam/test-project",
+    "avatar_url": null,
+    "git_ssh_url": "git@gitlab.com:ScalaWilliam/test-project.git",
+    "git_http_url": "https://gitlab.com/ScalaWilliam/test-project.git",
+    "namespace": "ScalaWilliam",
+    "visibility_level": 20,
+    "path_with_namespace": "ScalaWilliam/test-project",
+    "default_branch": "master",
+    "homepage": "https://gitlab.com/ScalaWilliam/test-project",
+    "url": "git@gitlab.com:ScalaWilliam/test-project.git",
+    "ssh_url": "git@gitlab.com:ScalaWilliam/test-project.git",
+    "http_url": "https://gitlab.com/ScalaWilliam/test-project.git"
+  },
+  "commits": [
+    {
+      "id": "ac9708d7795302ae662a1f109afad8ebe246b52f",
+      "message": "Add readme.md",
+      "timestamp": "2017-02-08T14:09:43+00:00",
+      "url": "https://gitlab.com/ScalaWilliam/test-project/commit/ac9708d7795302ae662a1f109afad8ebe246b52f",
+      "author": {
+        "name": "Vykintas Narmontas (William)",
+        "email": "me@vynar.com"
+      },
+      "added": [
+        "README.md"
+      ],
+      "modified": [],
+      "removed": []
+    }
+  ],
+  "total_commits_count": 1,
+  "repository": {
+    "name": "test-project",
+    "url": "git@gitlab.com:ScalaWilliam/test-project.git",
+    "description": "",
+    "homepage": "https://gitlab.com/ScalaWilliam/test-project",
+    "git_http_url": "https://gitlab.com/ScalaWilliam/test-project.git",
+    "git_ssh_url": "git@gitlab.com:ScalaWilliam/test-project.git",
+    "visibility_level": 20
+  }
+}

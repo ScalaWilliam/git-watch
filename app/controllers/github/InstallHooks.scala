@@ -64,10 +64,8 @@ class InstallHooks @Inject()(wsClient: WSClient, configuration: Configuration,
     Ok(Html(doc.html()))
   }
 
-
 }
 
 object InstallHooks {
-
   val validRepoPattern = """^[A-Za-z0-9\._-]+/[A-Za-z0-9_\.-]+$""".r
 }

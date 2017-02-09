@@ -1,52 +1,25 @@
-import java.net.URL
-
-import model.github.HookRequest
-import play.api.libs.json.{JsObject, Json}
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.Headers
+import play.api.test.FakeRequest
 
 import scala.io.Source
 
 /**
   * Created by me on 18/08/2016.
   */
-trait Samples {
-  def pingSample: HookRequest
-
-  def pushSample: HookRequest
-}
-
 object Samples {
-  def parseResource(uRL: URL): HookRequest = {
-    val source = scala.io.Source.fromURL(uRL)
-    try parseSample(source)
-    finally source.close()
+
+  def fromRequest(source: => Source): FakeRequest[JsValue] = {
+    val src = source.getLines().toList
+    FakeRequest(
+      method = src.head.split(" ")(0),
+      uri = src.head.split(" ")(1),
+      headers = Headers(src.drop(1).takeWhile(_ != "").map(_.split(": ")).map {
+        case Array(hn, hv) => hn -> hv
+      }: _*),
+      body = Json.parse(src.last)
+    )
   }
 
-  /**
-    * Read the sample resources: first a bunch of key-value pairs for headers, an empty line and then a body
-    */
-  def parseSample(source: Source): HookRequest = {
-    val headers = source.getLines()
-      .takeWhile(_ != "")
-      .map(_.split(": "))
-      .map {
-        case Array(headerName, headerValue) => headerName -> headerValue
-      }
-      .toList
-      .groupBy { case (header, value) => header }
-      .mapValues(_.map { case (header, value) => value })
-    val body = source.getLines().next()
-    val jsonBody = Json.parse(body).asInstanceOf[JsObject]
-    HookRequest.extract(
-      headers = headers,
-      body = body,
-      bodyJson = jsonBody
-    ).getOrElse {
-      throw new RuntimeException(s"Failed to extract hook request from source.")
-    }
-  }
-
-  def pingSample = parseResource(getClass.getResource("/sample-ping.txt"))
-
-  def pushSample = parseResource(getClass.getResource("/sample-push.txt"))
 
 }

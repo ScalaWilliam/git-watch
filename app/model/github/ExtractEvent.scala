@@ -9,7 +9,7 @@ import scala.util.Try
 /**
   * Created by me on 08/02/2017.
   */
-case class ExtractEvent(eventType: String, repositoryUrls: List[String]) {
+case class ExtractEvent(repositoryUrl: String) {
 
 }
 
@@ -39,14 +39,34 @@ object ExtractEvent {
     }
   }
 
-  def fromJsonRequest(request: Request[JsValue]): Option[ExtractEvent] = {
-    val urlKeys = List("html_url", "git_url", "ssh_url", "clone_url")
-    for {
-      eventType <- request.headers.get("X-GitHub-Event")
-      repositoryUrls = urlKeys.flatMap { key =>
-        (request.body \ "repository" \ key).asOpt[String]
-      }
-      if repositoryUrls.nonEmpty
-    } yield ExtractEvent(repositoryUrls = repositoryUrls, eventType = eventType)
+  case class AtRequest(request: Request[JsValue]) {
+    def githubEvent: Option[ExtractEvent] = {
+      for {
+        eventType <- request.headers.get("X-GitHub-Event")
+        if "push" == eventType
+        repositoryUri <- (request.body \ "repository" \ "html_url").asOpt[String]
+      } yield ExtractEvent(repositoryUri)
+    }
+
+    def bitbucketEvent: Option[ExtractEvent] = {
+      for {
+        eventType <- request.headers.get("X-Event-Key")
+        if "repo:push" == eventType
+        repositoryUri <- (request.body \ "repository" \ "links" \ "html" \ "href").asOpt[String]
+      } yield ExtractEvent(repositoryUri)
+    }
+
+    def gitlabEvent: Option[ExtractEvent] = {
+      for {
+        eventType <- request.headers.get("X-Gitlab-Event")
+        if "Push Hook" == eventType
+        repositoryUrl <- (request.body \ "repository" \ "homepage").asOpt[String]
+      } yield ExtractEvent(repositoryUrl)
+    }
+
+    def anyEvent: Option[ExtractEvent] = {
+      githubEvent orElse bitbucketEvent orElse gitlabEvent
+    }
   }
+
 }
