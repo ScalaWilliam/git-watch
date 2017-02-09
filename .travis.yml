@@ -7,5 +7,6 @@ cache:
     - $HOME/.sbt/boot/
 script:
   - sbt test
+  - cd client && npm install && npm run test
 jdk:
   - oraclejdk8

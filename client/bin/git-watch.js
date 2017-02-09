@@ -5,8 +5,13 @@ var argv = require('yargs').boolean('i').default({
     "u": 'https://git.watch/events/',
     "x": 'make push',
     "i": true
-}).argv;
-require('console-stamp')(console);
+}).describe('u', "Event URL.")
+    .describe('x', "Command to execute on push.")
+    .describe('i', "Skip initial execute.")
+    .help('h')
+    .alias('h', 'help')
+    .epilog("https://git.watch/\nhttps://www.scalawilliam.com/")
+    .alias("push-execute", "x").argv;
 
 var executeCommand = argv.x;
 
@@ -20,29 +25,32 @@ if (getUrlResult.code == 0) {
 }
 
 if (!repositoryUrl) {
-    throw new Error("Repository URL not detected.");
+    console.error("Repository URL not detected.");
+    console.error("Make sure you're inside a GitHub/GitLab/BitBucket repository.");
+    process.exit(1);
 }
 
+require('console-stamp')(console);
+
 function execute() {
-    console.log("Executing: '" + executeCommand + "'");
+    console.log("Executing: '" + executeCommand + "'.");
     shelljs.exec(executeCommand);
 }
 
-if (argv['initial-execute']) {
-    console.log("Executing initial command. '-i' to disable.");
+if (argv['i']) {
     execute();
 }
 
 var es = new EventSource(argv.u);
 es.onopen = function (e) {
-    console.log("Opened connection to '" + argv.u + "'");
+    console.log("Opened connection to '" + argv.u + "'.");
 };
 es.onerror = function (e) {
     console.error("Connection error", e);
 };
 es.addEventListener('push', function (e) {
     if (e.data == repositoryUrl) {
-        console.log("Received an event for '" + repositoryUrl + "'");
+        console.log("Received an event for '" + repositoryUrl + "'.");
         execute();
     }
 });

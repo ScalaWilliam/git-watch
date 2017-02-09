@@ -7,8 +7,8 @@
   "description": "Git Watch: watch your GitHub/BitBucket/GitLab repository",
   "main": "bin/git-watch.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch-test": "mocha tests --recursive --watch"
+    "test": "mocha tests",
+    "test-watch": "mocha tests --recursive --watch"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
     "watch",
     "bitbucket",
     "github",
+    "gitlab",
     "eventsource"
   ],
   "preferGlobal": true,
