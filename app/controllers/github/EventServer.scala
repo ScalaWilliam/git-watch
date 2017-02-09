@@ -27,6 +27,7 @@ class EventServer @Inject()(applicationLifecycle: ApplicationLifecycle)
 
   Logger.info("Initialized EventServer...")
 
+
   val (enum, channel) = Concurrent.broadcast[Either[Unit, HookRequest]]
   val (newEnum, newChannel) = Concurrent.broadcast[Either[Unit, ExtractEvent]]
 
