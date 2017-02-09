@@ -22,7 +22,7 @@ play-run:
 
 # Call back into this Makefile for each push.
 git-watch:
-	git-watch --url=https://git.watch/github/ScalaWilliam/git-watch --push-execute='make push-%ref% || true'
+	git-watch -i
 
 # Only execute deploy for master
 # Pass in the current SHA so we can do a diff
