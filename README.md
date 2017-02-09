@@ -37,8 +37,6 @@ Contribution implies transfer of ownership/copyright to Apt Elements Ltd.
 
 ## Changing Frontend and Content
 
-It's all rendered using XSLT.
-
 1. Install `sbt`, `npm` and JDK 8.
 2. Run `make develop-frontend`. Wait for a browser window to open.
 3. Edit the stuff in `dist/content/`.
