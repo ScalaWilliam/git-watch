@@ -4,19 +4,25 @@ var shelljs = require("shelljs");
 var foreverLib = require("../lib/forever-es.js");
 var argv = require('yargs').boolean('i').default({
     "u": 'https://git.watch/events/',
-    "x": 'make push',
     "i": false
-}).describe('u', "Event URL.")
-    .describe('x', "Command to execute on push.")
+}).describe('u', "EventSource URL.")
     .describe('i', "Execute on launch.")
+    .usage('Usage: $0 [-s shell] [-h] [-i] [-u url] -- [command]')
     .help('h')
     .alias('h', 'help')
-    .epilog("https://git.watch/\nhttps://www.scalawilliam.com/")
-    .alias("push-execute", "x").argv;
+    .alias('s', 'shell')
+    .alias('u', 'url')
+    .alias('i', 'initial-execute')
+    .epilog("* https://git.watch/\n* https://www.scalawilliam.com/")
+    .argv;
 
-var executeCommand = argv.x;
+var executeCommand = argv._.join(" ");
 
 var url = require("../lib/url.js");
+var exec_params;
+if (argv.shell) {
+    exec_params = {'shell': argv.shell};
+}
 
 var repositoryUrl;
 var getUrlResult = shelljs.exec('git config --get remote.origin.url', {silent: true});
@@ -35,7 +41,7 @@ require('console-stamp')(console);
 
 function execute() {
     console.log("Executing: '" + executeCommand + "'.");
-    shelljs.exec(executeCommand);
+    shelljs.exec(executeCommand, exec_params);
 }
 
 if (argv['i']) {
@@ -43,9 +49,9 @@ if (argv['i']) {
 }
 
 foreverLib.forever(function () {
-    var es = new EventSource(argv.u);
+    var es = new EventSource(argv.url);
     es.onopen = function (e) {
-        console.log("Opened connection to '" + argv.u + "'.");
+        console.log("Opened connection to '" + argv.url + "'.");
     };
     es.addEventListener('push', function (e) {
         if (e.data == repositoryUrl) {
