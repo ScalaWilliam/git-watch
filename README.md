@@ -3,7 +3,7 @@
 [![Join the chat at https://gitter.im/ScalaWilliam/git-watch](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ScalaWilliam/git-watch?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Workflow](https://badge.waffle.io/ScalaWilliam/git-watch.png?label=ready&title=Ready)](https://waffle.io/ScalaWilliam/git-watch)
 
-Git Watch reacts to GitHub Push events to enable Continuous Deployment. And polls too.
+Git Watch is a minimalist Jenkins in a Shell.
 
 # Philosophy
 
@@ -18,6 +18,7 @@ Continuous Deployment works spectacularly well. It is very fast and fun to use. 
 * [Slideshare](http://www.slideshare.net/WilliamNarmontas/git-watch)
 * [Getting started with Git.Watch](https://github.com/ScalaWilliam/git-watch/blob/master/tutorials/GETTINGSTARTED.md)
 * [Deploying your static website to Firebase with Git.Watch on push to master](https://github.com/ScalaWilliam/git-watch/blob/master/tutorials/FIREBASE.md)
+
 
 # Basic Demo
 
@@ -36,8 +37,6 @@ See: [DEVELOPING.md](DEVELOPING.md)
 Contribution implies transfer of ownership/copyright to Apt Elements Ltd.
 
 ## Changing Frontend and Content
-
-It's all rendered using XSLT.
 
 1. Install `sbt`, `npm` and JDK 8.
 2. Run `make develop-frontend`. Wait for a browser window to open.
