@@ -53,3 +53,8 @@ Feel free to contribute to any of the tickets, including improving the design an
 * Copyright (2016) Apt Elements Ltd. [William Narmontas](https://www.scalawilliam.com/)
 
 [![Throughput Graph](https://graphs.waffle.io/ScalaWilliam/git-watch/throughput.svg)](https://waffle.io/ScalaWilliam/git-watch/metrics/throughput)
+
+## How it works
+
+The webhook sends a POST request over HTTPS every time a git push is made to the repository.
+

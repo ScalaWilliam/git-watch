@@ -1,8 +1,8 @@
-package model.github
+package model
 
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{BodyParser, BodyParsers, Request}
 import play.api.mvc.Results._
+import play.api.mvc.{BodyParser, BodyParsers, Request}
 
 import scala.concurrent.ExecutionContext
 import scala.util.Try

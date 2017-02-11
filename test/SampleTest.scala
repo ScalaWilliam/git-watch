@@ -1,4 +1,4 @@
-import model.github.PushEvent$
+import model.PushEvent
 import org.scalatest.FunSuite
 import org.scalatest.Matchers._
 import org.scalatest.OptionValues._
