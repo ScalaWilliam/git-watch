@@ -10,3 +10,5 @@ script:
   - cd client && npm install && npm run test
 jdk:
   - oraclejdk8
+before_script:
+  - npm install -g mocha
