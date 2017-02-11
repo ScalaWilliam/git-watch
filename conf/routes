@@ -3,5 +3,5 @@ POST        /                    @controllers.EventServer.push(tag="")
 POST        /*tag                @controllers.EventServer.push(tag)
 GET         /events/             @controllers.EventServer.allEvents
 GET         /events-ws/          @controllers.EventServer.allEventsWs
-GET         /static/*name        @controllers.StaticDev.get(name: String)
+GET         /static/*name        @controllers.StaticResources.get(name: String)
 GET         /version/            @controllers.Version.version
