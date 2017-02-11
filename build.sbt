@@ -2,11 +2,8 @@ scalaVersion := "2.11.8"
 name := "gitwatch"
 enablePlugins(PlayScala)
 
-libraryDependencies += "com.typesafe.akka" %% "akka-agent" % "2.4.16"
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
-libraryDependencies += "commons-codec" % "commons-codec" % "1.10"
-libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % "test"
-libraryDependencies += ws
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
+libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0-M1" % "test"
 libraryDependencies += "org.jsoup" % "jsoup" % "1.10.2"
 libraryDependencies += "org.scala-lang.modules" %% "scala-async" % "0.9.6"
 
