@@ -18,7 +18,8 @@ import scala.concurrent.duration._
   */
 @Singleton
 class EventServer @Inject()(implicit actorSystem: ActorSystem,
-                            executionContext: ExecutionContext) extends Controller {
+                            executionContext: ExecutionContext)
+    extends Controller {
 
   private val (newEnum, newChannel) = Concurrent.broadcast[PushEvent]
 
@@ -26,13 +27,15 @@ class EventServer @Inject()(implicit actorSystem: ActorSystem,
 
   def allEvents() = Action {
     val dataSource: Source[Event, _] = {
-      sourceAll.map { hr =>
-        Event(
-          id = None,
-          name = Some("push"),
-          data = hr.repositoryUrl
-        )
-      }.merge(EventServer.keepAliveSource)
+      sourceAll
+        .map { hr =>
+          Event(
+            id = None,
+            name = Some("push"),
+            data = hr.repositoryUrl
+          )
+        }
+        .merge(EventServer.keepAliveSource)
     }
     Ok.chunked(content = dataSource).as("text/event-stream")
   }
@@ -57,7 +60,3 @@ object EventServer {
 
   val keepAliveSource = Source.tick(10.seconds, 10.seconds, keepAliveEvent)
 }
-
-
-
-

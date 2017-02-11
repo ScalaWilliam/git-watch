@@ -17,8 +17,10 @@ class Version extends Controller {
   }
 
   def version = Action {
-    val parsedJson = Json.parse(gitwatch.BuildInfo.toJson).asInstanceOf[JsObject]
-    val two = JsObject(commitDescription.map(d => "gitCommitDescription" -> JsString(d)).toSeq)
+    val parsedJson =
+      Json.parse(gitwatch.BuildInfo.toJson).asInstanceOf[JsObject]
+    val two = JsObject(
+      commitDescription.map(d => "gitCommitDescription" -> JsString(d)).toSeq)
     Ok(parsedJson ++ two)
   }
 

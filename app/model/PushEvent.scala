@@ -10,9 +10,7 @@ import scala.util.Try
 /**
   * Created by me on 08/02/2017.
   */
-case class PushEvent(repositoryUrl: String) {
-
-}
+case class PushEvent(repositoryUrl: String) {}
 
 object PushEvent {
 
@@ -27,13 +25,17 @@ object PushEvent {
             .getOrElse(Left("Could not parse JSON"))
         }
         .getOrElse(Left("Not found field 'payload"))
-        .left.map(str => BadRequest(str))
+        .left
+        .map(str => BadRequest(str))
     }
   }
 
-  def combinedParser(implicit executionContext: ExecutionContext): BodyParser[JsValue] = {
+  def combinedParser(
+      implicit executionContext: ExecutionContext): BodyParser[JsValue] = {
     BodyParsers.parse.using { requestHeader =>
-      if (requestHeader.headers.get("Content-Type").contains("application/x-www-form-urlencoded"))
+      if (requestHeader.headers
+            .get("Content-Type")
+            .contains("application/x-www-form-urlencoded"))
         urlEncodedParser
       else BodyParsers.parse.tolerantJson
     }
@@ -44,7 +46,8 @@ object PushEvent {
       for {
         eventType <- request.headers.get("X-GitHub-Event")
         if "push" == eventType
-        repositoryUri <- (request.body \ "repository" \ "html_url").asOpt[String]
+        repositoryUri <- (request.body \ "repository" \ "html_url")
+          .asOpt[String]
       } yield PushEvent(repositoryUri)
     }
 
@@ -52,7 +55,8 @@ object PushEvent {
       for {
         eventType <- request.headers.get("X-Event-Key")
         if "repo:push" == eventType
-        repositoryUri <- (request.body \ "repository" \ "links" \ "html" \ "href").asOpt[String]
+        repositoryUri <- (request.body \ "repository" \ "links" \ "html" \ "href")
+          .asOpt[String]
       } yield PushEvent(repositoryUri)
     }
 
@@ -60,7 +64,8 @@ object PushEvent {
       for {
         eventType <- request.headers.get("X-Gitlab-Event")
         if "Push Hook" == eventType
-        repositoryUrl <- (request.body \ "repository" \ "homepage").asOpt[String]
+        repositoryUrl <- (request.body \ "repository" \ "homepage")
+          .asOpt[String]
       } yield PushEvent(repositoryUrl)
     }
 

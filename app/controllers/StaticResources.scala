@@ -12,7 +12,9 @@ import scala.collection.JavaConverters._
 /**
   * Serve static files for development since we don't want to run nginx on dev machine.
   */
-class StaticResources @Inject()(environment: Environment, contentPath: ContentPath) extends Controller {
+class StaticResources @Inject()(environment: Environment,
+                                contentPath: ContentPath)
+    extends Controller {
 
   private def staticPath = contentPath.contentPath.resolve("static")
 
@@ -21,11 +23,13 @@ class StaticResources @Inject()(environment: Environment, contentPath: ContentPa
   }
 
   def get(path: String) = resources.find(_.endsWith(path)) match {
-    case Some(v) => Action {
-      Ok.sendFile(v.toFile)
-    }
-    case None => Action {
-      NotFound("Not found")
-    }
+    case Some(v) =>
+      Action {
+        Ok.sendFile(v.toFile)
+      }
+    case None =>
+      Action {
+        NotFound("Not found")
+      }
   }
 }

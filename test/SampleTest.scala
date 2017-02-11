@@ -41,4 +41,3 @@ class SampleTest extends FunSuite {
   }
 
 }
-
