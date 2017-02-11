@@ -1,28 +1,21 @@
 package controllers
 
-import java.nio.file.{Files, Path, Paths}
+import java.nio.file.{Files, Path}
 import java.util.stream.Collectors
 import javax.inject.Inject
 
+import lib.ContentPath
 import play.Environment
-import play.api.Configuration
 import play.api.mvc.{Action, Controller}
-
-import scala.concurrent.ExecutionContext
 
 /**
   * Serve static files for development since we don't want to run nginx on dev machine.
   */
-class StaticDev @Inject()(environment: Environment, configuration: Configuration)(implicit executionContext: ExecutionContext)
-  extends Controller {
+class StaticDev @Inject()(environment: Environment, contentPath: ContentPath) extends Controller {
 
-  require(!environment.isProd, s"Environment is ${environment}")
+  private def staticPath = contentPath.contentPath.resolve("static")
 
-  def contentPath = Paths.get(configuration.underlying.getString("git.watch.content"))
-
-  def staticPath = contentPath.resolve("static")
-
-  def resources = {
+  private def resources = {
     import scala.collection.JavaConverters._
     Files.list(staticPath).collect(Collectors.toList[Path]).asScala.toList
   }

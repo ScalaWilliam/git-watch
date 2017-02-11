@@ -1,14 +1,12 @@
 # Git Watch (CLI)
 
-Git Watch enables continuous deployment. Simplest way to get started is:
+Git Watch runs commands in response to your Git pushes. After setting up the webhook to `https://git.watch/`, you can do:
 
     npm install -g gitwatch-client
     cd /your/github/repo
-    github-watch-push --push-execute='git pull'
+    git-watch -- ./push.sh push
 
-Currently we support GitHub only.
-
-However we'd recommend using more advanced approaches, documented at <https://git.watch/>
+We support GitHub, BitBucket and GitLab. For more detail, <https://git.watch/>.
 
 ## Local set up
 

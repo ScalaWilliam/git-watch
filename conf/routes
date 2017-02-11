@@ -1,13 +1,7 @@
-GET         /                              @controllers.Index.index
-POST        /github/                       @controllers.github.EventServer.push
-GET         /github/:owner/:repo           @controllers.github.EventServer.watch(owner: String, repo: String)
-GET         /ws/github/:owner/:repo        @controllers.github.EventServer.watchWs(owner: String, repo: String)
-POST        /bitbucket/                    @controllers.github.EventServer.push
-GET         /bitbucket/:owner/:repo        @controllers.github.EventServer.watch(owner: String, repo: String)
-GET         /github-callback/              @controllers.github.InstallHooks.githubCallback
-GET         /install/                      @controllers.github.InstallHooks.installGet
-POST        /install/                      @controllers.github.InstallHooks.installPost
-GET         /static/*name                  @controllers.StaticDev.get(name: String)
-GET         /version/                      @controllers.Version.version
-
-GET         /events/                       @controllers.github.EventServer.allEvents
+GET         /                    @controllers.Index.index
+POST        /                    @controllers.EventServer.push(tag="")
+POST        /*tag                @controllers.EventServer.push(tag)
+GET         /events/             @controllers.EventServer.allEvents
+GET         /events-ws/          @controllers.EventServer.allEventsWs
+GET         /static/*name        @controllers.StaticDev.get(name: String)
+GET         /version/            @controllers.Version.version
