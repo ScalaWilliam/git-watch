@@ -34,9 +34,12 @@ deploy() {
 }
 
 changed_files() {
-  git diff --name-only "$SHA" "master"
+  git diff --name-only "$SHA" "master" \
     | grep -E '^(app|conf|dist|project|build)' \
     | grep -v 'dist/content'
 }
 
-push
+git remote update
+if [[ $(git diff origin/master) != "" ]]; then
+    push;
+fi
