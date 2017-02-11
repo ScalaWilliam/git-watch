@@ -27,9 +27,9 @@ deploy() {
   echo Changed files from "$SHA" to master:
   changed_files;
   if [[ $(changed_files) == "" ]]; then
-   make deploy-content;
+   deploy_content
   else
-   make deploy-app;
+   deploy_app
   fi
 }
 
