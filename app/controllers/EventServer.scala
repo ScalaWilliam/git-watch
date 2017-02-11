@@ -21,37 +21,31 @@ class EventServer @Inject()(implicit actorSystem: ActorSystem,
                             executionContext: ExecutionContext)
     extends Controller {
 
-  private val (newEnum, newChannel) = Concurrent.broadcast[PushEvent]
+  private val (enumerator, channel) = Concurrent.broadcast[PushEvent]
 
-  def sourceAll = Source.fromPublisher(Streams.enumeratorToPublisher(newEnum))
-
-  def allEvents() = Action {
-    val dataSource: Source[Event, _] = {
-      sourceAll
-        .map { hr =>
-          Event(
-            id = None,
-            name = Some("push"),
-            data = hr.repositoryUrl
-          )
-        }
-        .merge(EventServer.keepAliveSource)
-    }
-    Ok.chunked(content = dataSource).as("text/event-stream")
-  }
+  private def pushEvents =
+    Source.fromPublisher(Streams.enumeratorToPublisher(enumerator))
 
   def push(tag: String) = Action(PushEvent.combinedParser) { request =>
     PushEvent.AtRequest(request).anyEvent.foreach { extractEvent =>
-      newChannel.push(extractEvent)
+      channel.push(extractEvent)
     }
     Ok("Got it, thanks.")
   }
 
-  def allEventsWs: WebSocket = WebSocket.accept[String, String] { rq =>
-    Flow.fromSinkAndSource(
-      sink = Sink.ignore,
-      source = sourceAll.map(e => e.repositoryUrl)
-    )
+  def eventStream() = Action {
+    val events =
+      pushEvents.map(_.toEventSource).merge(EventServer.keepAliveSource)
+    Ok.chunked(content = events)
+      .as("text/event-stream")
+  }
+
+  def eventStreamWebsocket: WebSocket = WebSocket.accept[String, String] {
+    rq =>
+      Flow.fromSinkAndSource(
+        sink = Sink.ignore,
+        source = pushEvents.map(e => e.repositoryUrl)
+      )
   }
 }
 

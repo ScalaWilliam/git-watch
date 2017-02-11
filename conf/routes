@@ -1,7 +1,7 @@
 GET         /                    @controllers.Index.index
 POST        /                    @controllers.EventServer.push(tag="")
 POST        /*tag                @controllers.EventServer.push(tag)
-GET         /events/             @controllers.EventServer.allEvents
-GET         /events-ws/          @controllers.EventServer.allEventsWs
+GET         /events/             @controllers.EventServer.eventStream
+GET         /events-ws/          @controllers.EventServer.eventStreamWebsocket
 GET         /static/*name        @controllers.StaticResources.get(name: String)
 GET         /version/            @controllers.Version.version

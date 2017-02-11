@@ -1,5 +1,6 @@
 package model
 
+import play.api.libs.EventSource.Event
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Results._
 import play.api.mvc.{BodyParser, BodyParsers, Request}
@@ -10,7 +11,14 @@ import scala.util.Try
 /**
   * Created by me on 08/02/2017.
   */
-case class PushEvent(repositoryUrl: String) {}
+case class PushEvent(repositoryUrl: String) {
+  def toEventSource: Event =
+    Event(
+      id = None,
+      name = Some("push"),
+      data = repositoryUrl
+    )
+}
 
 object PushEvent {
 
