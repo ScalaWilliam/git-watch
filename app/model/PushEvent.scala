@@ -4,6 +4,7 @@ import play.api.libs.EventSource.Event
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Results._
 import play.api.mvc.{BodyParser, BodyParsers, Request}
+import play.core.server.common.SubnetValidate
 
 import scala.concurrent.ExecutionContext
 import scala.util.Try
@@ -39,11 +40,11 @@ object PushEvent {
   }
 
   def combinedParser(
-      implicit executionContext: ExecutionContext): BodyParser[JsValue] = {
+                      implicit executionContext: ExecutionContext): BodyParser[JsValue] = {
     BodyParsers.parse.using { requestHeader =>
       if (requestHeader.headers
-            .get("Content-Type")
-            .contains("application/x-www-form-urlencoded"))
+        .get("Content-Type")
+        .contains("application/x-www-form-urlencoded"))
         urlEncodedParser
       else BodyParsers.parse.tolerantJson
     }
@@ -80,6 +81,50 @@ object PushEvent {
     def anyEvent: Option[PushEvent] = {
       githubEvent orElse bitbucketEvent orElse gitlabEvent
     }
+  }
+
+
+  /**
+    * Validate source IP addresses.
+    *
+    * This is done to verify that the request comes from a legit source.
+    * If we didn't have this filter the clients could face a DOS if somebody decides to spam us
+    * with many many requests and the client does not use a secret.
+    *
+    * A secret is nice but not easy to make generic.
+    *
+    * Ideally they send us a signed HMAC (RSA?) that is service-wide and an HMAC with shared secret.
+    *
+    * GitLab doesn't publish its IPs: https://gitlab.com/gitlab-com/support-forum/issues/847
+    *
+    */
+  class AtIpValidatedRequest(request: Request[JsValue]) extends AtRequest(request) {
+    /**
+      * @see https://confluence.atlassian.com/bitbucket/manage-webhooks-735643732.html
+      * @see https://bitbucket.org/site/master/issues/12195/webhook-hmac-signature-security-issue
+      */
+    def isBitBucketIp: Boolean = {
+      SubnetValidate.validate("104.192.143.0/24", request.remoteAddress)
+    }
+
+    /**
+      * @see https://developer.github.com/webhooks/securing/
+      */
+    def isGitHubIP: Boolean = {
+      SubnetValidate.validate("192.30.252.0/22", request.remoteAddress)
+    }
+
+    override def bitbucketEvent: Option[PushEvent] = {
+      if (isBitBucketIp) super.bitbucketEvent else None
+    }
+
+    override def githubEvent: Option[PushEvent] = {
+      if (isGitHubIP) super.githubEvent else None
+    }
+  }
+
+  object AtIpValidatedRequest {
+    def apply(request: Request[JsValue]): AtIpValidatedRequest = new AtIpValidatedRequest(request)
   }
 
 }
