@@ -19,16 +19,16 @@ import scala.concurrent.duration._
   * Created by me on 31/07/2016.
   */
 @Singleton
-class EventServer(validateIp: Boolean)(
-  implicit actorSystem: ActorSystem,
-  executionContext: ExecutionContext)
-  extends Controller {
+class EventServer(validateIp: Boolean)(implicit actorSystem: ActorSystem,
+                                       executionContext: ExecutionContext)
+    extends Controller {
 
   Logger.info(s"Validating IP: ${validateIp}")
 
-  @Inject def this(configuration: Configuration)(
-    implicit actorSystem: ActorSystem,
-    executionContext: ExecutionContext) = {
+  @Inject
+  def this(configuration: Configuration)(
+      implicit actorSystem: ActorSystem,
+      executionContext: ExecutionContext) = {
     this(validateIp = configuration.getBoolean("validate-ip").contains(true))
   }
 
@@ -37,17 +37,18 @@ class EventServer(validateIp: Boolean)(
   private def pushEvents =
     Source.fromPublisher(Streams.enumeratorToPublisher(enumerator))
 
-  def push(tag: String): Action[JsValue] = Action(PushEvent.combinedParser) { request =>
-    val atRequest = {
-      if (validateIp)
-        PushEvent.AtIpValidatedRequest(request)
-      else
-        PushEvent.AtRequest(request)
-    }
-    atRequest.anyEvent.foreach { extractEvent =>
-      channel.push(extractEvent)
-    }
-    Ok("Got it, thanks.")
+  def push(tag: String): Action[JsValue] = Action(PushEvent.combinedParser) {
+    request =>
+      val atRequest = {
+        if (validateIp)
+          PushEvent.AtIpValidatedRequest(request)
+        else
+          PushEvent.AtRequest(request)
+      }
+      atRequest.anyEvent.foreach { extractEvent =>
+        channel.push(extractEvent)
+      }
+      Ok("Got it, thanks.")
   }
 
   def eventStream() = Action {

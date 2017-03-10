@@ -40,11 +40,11 @@ object PushEvent {
   }
 
   def combinedParser(
-                      implicit executionContext: ExecutionContext): BodyParser[JsValue] = {
+      implicit executionContext: ExecutionContext): BodyParser[JsValue] = {
     BodyParsers.parse.using { requestHeader =>
       if (requestHeader.headers
-        .get("Content-Type")
-        .contains("application/x-www-form-urlencoded"))
+            .get("Content-Type")
+            .contains("application/x-www-form-urlencoded"))
         urlEncodedParser
       else BodyParsers.parse.tolerantJson
     }
@@ -83,7 +83,6 @@ object PushEvent {
     }
   }
 
-
   /**
     * Validate source IP addresses.
     *
@@ -98,7 +97,9 @@ object PushEvent {
     * GitLab doesn't publish its IPs: https://gitlab.com/gitlab-com/support-forum/issues/847
     *
     */
-  class AtIpValidatedRequest(request: Request[JsValue]) extends AtRequest(request) {
+  class AtIpValidatedRequest(request: Request[JsValue])
+      extends AtRequest(request) {
+
     /**
       * @see https://confluence.atlassian.com/bitbucket/manage-webhooks-735643732.html
       * @see https://bitbucket.org/site/master/issues/12195/webhook-hmac-signature-security-issue
@@ -124,7 +125,8 @@ object PushEvent {
   }
 
   object AtIpValidatedRequest {
-    def apply(request: Request[JsValue]): AtIpValidatedRequest = new AtIpValidatedRequest(request)
+    def apply(request: Request[JsValue]): AtIpValidatedRequest =
+      new AtIpValidatedRequest(request)
   }
 
 }

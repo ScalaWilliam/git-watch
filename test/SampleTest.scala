@@ -25,7 +25,9 @@ class SampleTest extends FunSuite {
     expectedUrl = "https://gitlab.com/ScalaWilliam/test-project"
   )
 
-  def testPlatform(platformName: String, expectedUrl: String, remoteAddress: String = "127.0.0.1") = {
+  def testPlatform(platformName: String,
+                   expectedUrl: String,
+                   remoteAddress: String = "127.0.0.1") = {
     test(s"${platformName} sample works") {
       val resource = s"/${platformName.toLowerCase}-push.request"
       withClue(s"Resource: ${resource}") {
