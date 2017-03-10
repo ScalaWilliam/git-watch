@@ -60,9 +60,10 @@ Extracting too much information became a scope creep that introduced significant
 in both the client and the server.
 
 # Security
-URLs of updated repositories are sent to the public event stream. 
+URLs of updated repositories are sent to the public event stream.
+
+Source IP addresses are checked for BitBucket and GitHub to prevent DOS.
 
 ## Licence
-
 * Client: MIT, Server: GPLv3.
 * Copyright (2016) Apt Elements Ltd. [William Narmontas](https://www.scalawilliam.com/)
