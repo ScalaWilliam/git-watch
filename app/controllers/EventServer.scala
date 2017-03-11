@@ -23,7 +23,7 @@ class EventServer(validateIp: Boolean)(implicit actorSystem: ActorSystem,
                                        executionContext: ExecutionContext)
     extends Controller {
 
-  Logger.info(s"Validating IP: ${validateIp}")
+  Logger.info(s"Validating IPs: ${validateIp}")
 
   @Inject
   def this(configuration: Configuration)(

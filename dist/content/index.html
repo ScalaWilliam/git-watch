@@ -12,56 +12,12 @@
     <meta property="og:description" content="Trigger commands when your Git repository is updated"/>
 </head>
 <body>
-<a id="git-stars-button" class="github-button" href="https://github.com/ScalaWilliam/git-watch" data-count-href="/ScalaWilliam/git-watch/stargazers" data-count-api="/repos/ScalaWilliam/git-watch#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star ScalaWilliam/git-watch on GitHub">Star</a>
-<section id="readme">
-    <h2>Usage</h2>
-    <p>Supported: GitHub, BitBucket and GitLab.</p>
-    <ol>
-        <li>Add a WebHook URL <code>https://git.watch/</code></li>
-        <li>Run <code>npm install -g gitwatch-client</code></li>
-        <li>On your target machine, inside the Git clone of your repository, run <code>git-watch -- echo "git updated!"</code></li>
-        <li>Push to your Git repository</li>
-    </ol>
-    <p>Run <code>git-watch --help</code> for more information.</p>
-</section>
-    <section>
-    <h2>Use cases</h2>
-    
-    <p>I use it for continuous deployment from <code>master</code> branch for:</p>
-        <dl>
-            <dt><a href="https://actionfps.com">ActionFPS</a>
-                / <a href="https://git.watch/">Git Watch</a>
-                / <a href="https://git.work/">Git Work</a></dt>
-            <dd>Fast deployment: Build the project with `sbt` and deploy it with `systemd` on a bare metal server.</dd>
-            <dd>Instant deployment: `rsync` HTML templates if they are the only change in the branch.</dd>
-            <dd>Example deployment scripts: <a href="https://github.com/ScalaWilliam/ActionFPS/blob/master/push.sh">ActionFPS push.sh</a>,
-            <a href="https://github.com/ScalaWilliam/git-watch/blob/master/push.sh">Git Watch push.sh</a>,
-                <a href="https://github.com/ScalaWilliam/git-work/blob/master/push">Git Work push</a>.
-            </dd>
-            <dt><a href="https://actionfps.com">ActionFPS</a></dt>
-            <dd>Redeploy a simple background Python app on a bare metal server.</dd>
-            <dd><a href="https://github.com/ActionFPS/ActionFPS-Game/blob/960794fd4bde6cc56d812e7cb09c0d25685b633c/Makefile.deploy">Build a game server binary and deploy it</a> with `systemd` on a bare metal server.</dd>
-            <dt>ScalaWilliam.com (previously)</dt>
-            <dd>Build the static site and deploy it automatically to Firebase.
-                Moved to Travis-CI because I don't have to manage the build server.
-                Unfortunately deploy speeds are a bit poorer than git watch.
-            </dd>
-            <dd>Before Git Watch I used a custom PHP WebHook receiver. Problem with this
-            was that I'd have to expose it to the world, requiring open ports, etc, etc.
-            Git Watch Client on the other hand only needs HTTPS access and that's it.</dd>
-        </dl>
-        <p>So typical characteristics for the perfect use case are:</p>
-        <ul>
-            <li>You're experimenting</li>
-            <li>Project is lightweight</li>
-            <li>You want rapid iterations</li>
-            <li>You have minimal scaling needs</li>
-            <li>You want to deploy where you build</li>
-            <li>You want instant content redeploys</li>
-            <li>You don't need reproducibility right now</li>
-            <li>You don't want to invest time in a proper CI right now</li>
-        </ul>
-    </section>
+    <header>
+    <h1>Git Watch</h1>
+    <h2>Trigger commands when your Git repository is updated</h2>        
+    <h3><a href="https://github.com/ScalaWilliam/git-watch/blob/master/README.md#usage">Get Started</a></h3>
+    <a id="git-stars-button" class="github-button" data-style="mega" href="https://github.com/ScalaWilliam/git-watch" data-count-href="/ScalaWilliam/git-watch/stargazers" data-count-api="/repos/ScalaWilliam/git-watch#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star ScalaWilliam/git-watch on GitHub">Star</a>
+    </header>
 
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -75,10 +31,6 @@
     ga('send', 'pageview');
 
 </script>
-    
 <script async defer src="https://buttons.github.io/buttons.js"></script>
-
 </body>
-
-
 </html>
