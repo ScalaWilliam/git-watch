@@ -1,6 +1,5 @@
 body {
     background:rgb(248,250,240);
-    margin-left:7em;
     line-height:1.6;
     color:#333;
 }
@@ -23,33 +22,22 @@ h1 a:hover {
 h1,h2,h3,h4,h5 {
     font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif	;
 }
-#hook-in a { text-decoration: underline;}
-button[type=submit] {
-    font-weight:bold;
-    padding:1em;
-    font-size:1em;
+div[role=main] {
+    max-width:32em;
+    margin-left: auto;
+    margin-right:auto;
 }
-select[name=repo] {
-    width:24em;
-    font-size:0.8em;
-    padding:0.2em;
+blockquote#h {
+    font-weight:bold;
 }
 
-input { font-size:0.8em; padding:0.2em;}
-.usage {
-    font-family:monospace;
-    font-size:1em;
-    padding:1em;
-    width:55em;
-    resize: none;
+p#cta {
+    font-weight:bold;
+    font-size:1.2em;
 }
-#share {
-    max-width:50em;
+h4 {
+    margin-left:2.5em;
 }
-#share ol {
-    list-style-type: none;
-    display:flex;
-}
-#share ol li {
-    flex:1
+footer {
+    margin-left:2.5em;
 }
