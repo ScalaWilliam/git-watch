@@ -8,8 +8,8 @@ import model.PushEvent
 import play.api.{Configuration, Logger}
 import play.api.libs.EventSource.Event
 import play.api.libs.iteratee.Concurrent
+import play.api.libs.iteratee.streams.IterateeStreams
 import play.api.libs.json.JsValue
-import play.api.libs.streams.Streams
 import play.api.mvc._
 
 import scala.concurrent.ExecutionContext
@@ -20,22 +20,24 @@ import scala.concurrent.duration._
   */
 @Singleton
 class EventServer(validateIp: Boolean)(implicit actorSystem: ActorSystem,
+                                       components: ControllerComponents,
                                        executionContext: ExecutionContext)
-    extends Controller {
+    extends AbstractController(components) {
 
   Logger.info(s"Validating IPs: ${validateIp}")
 
   @Inject
   def this(configuration: Configuration)(
       implicit actorSystem: ActorSystem,
+      components: ControllerComponents,
       executionContext: ExecutionContext) = {
-    this(validateIp = configuration.getBoolean("validate-ip").contains(true))
+    this(validateIp = configuration.get[Boolean]("validate-ip"))
   }
 
   private val (enumerator, channel) = Concurrent.broadcast[PushEvent]
 
   private def pushEvents =
-    Source.fromPublisher(Streams.enumeratorToPublisher(enumerator))
+    Source.fromPublisher(IterateeStreams.enumeratorToPublisher(enumerator))
 
   def push(tag: String): Action[JsValue] = Action(PushEvent.combinedParser) {
     request =>
