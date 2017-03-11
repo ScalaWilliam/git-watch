@@ -29,8 +29,8 @@ I use it for continuous deployment from `master` branch for:
   * <a href="https://github.com/ActionFPS/ActionFPS-Game/blob/960794fd4bde6cc56d812e7cb09c0d25685b633c/Makefile.deploy">Build a game server binary and deploy it</a> with `systemd` on a bare metal server.
 * [ScalaWilliam.com](https://www.scalawilliam.com/) (previously):
   * Build the static site and deploy it automatically to Firebase.
-  * However, I moved to Travis-CI to manage fewer servers myself. Unfortunately, deploy speeds are poorer than git watch.
-  * Before Git Watch and Travis, I used a custom PHP WebHook received. However there was too much management involved in getting it to work: 
+  * However, now I <a href="https://github.com/ScalaWilliam/ScalaWilliam.com/blob/master/.travis.yml">deploy to Firebase via Travis-CI</a> in order to have fewer servers to manage. Unfortunately, deploy speeds are poorer than git watch.
+  * Before Git Watch and Travis, I used a custom PHP WebHook receiver. However there was too much management involved in getting it to work: 
     Setting up PHP-FPM, nginx, etc, just for simple deployments.
   * Git Watch only needs HTTPS access and that's it!
 
