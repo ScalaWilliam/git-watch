@@ -1,6 +1,5 @@
 # [git.watch](https://git.watch) [![Build Status](https://travis-ci.org/ScalaWilliam/git-watch.svg?branch=master)](https://travis-ci.org/ScalaWilliam/git-watch)
 
-
 > Trigger commands when your Git repository is updated
 
 ## Usage
@@ -33,6 +32,7 @@ I use it for continuous deployment from `master` branch for:
   * Before Git Watch and Travis, I used a custom PHP WebHook receiver. However there was too much management involved in getting it to work: 
     Setting up PHP-FPM, nginx, etc, just for simple deployments.
   * Git Watch only needs HTTPS access and that's it!
+* This would also work very well for deploying changes to your VPS/private server for your Wordpress, PHP and other pages. Super easy and simple - just use `git pull` as the executable command and that's it!
 
 So typical characteristics when you would use Git Watch would be:
 * You're experimenting
@@ -51,7 +51,7 @@ So typical characteristics when you would use Git Watch would be:
 3. The **Git Watch server** broadcasts the repository url to the event stream at `https://git.watch/events/`.
 4. A **Git Watch client** listens to the stream, receives the event and then triggers your custom command. 
 
-# Why it doesn't pass on the commit hash
+## Why it doesn't pass on the commit hash
 A Git push event is a bit more than just the latest hash. There's a lot of this information
 and it requires a lot of custom parsing that can't be re-used. Instead of this approach,
 I realised all we need is just a trigger, and then the user can decide how to deal with the new
@@ -60,11 +60,12 @@ information available in Git.
 Extracting too much information became a scope creep that introduced significant complexity
 in both the client and the server.
 
-# Security
+## Security
 URLs of updated repositories are sent to the public event stream.
 
 Source IP addresses are checked for BitBucket and GitHub to prevent DOS.
 
+# Recipes
 ## For a service
 
 `push.sh` could be:
