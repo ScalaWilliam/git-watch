@@ -5,6 +5,9 @@ enablePlugins(PlayScala)
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0-M1" % "test"
 libraryDependencies += "org.jsoup" % "jsoup" % "1.10.2"
+libraryDependencies += ws
+libraryDependencies += "org.apache.httpcomponents" % "fluent-hc" % "4.5.3"
+libraryDependencies += "org.apache.httpcomponents" % "httpclient-cache" % "4.5.3"
 libraryDependencies += "org.scala-lang.modules" %% "scala-async" % "0.9.6"
 
 publishArtifact in (Compile, packageDoc) := false

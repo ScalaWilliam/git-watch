@@ -2,19 +2,7 @@ body {
     background:rgb(248,250,240);
     margin-left:7em;
     line-height:1.6;
-
     color:#333;
-}
-header {
-    display:flex;
-    align-items: center;
-}
-header ol {
-    list-style-type: none;
-}
-header ol li {
-    display:inline-block;
-    padding-right:1em;
 }
 a {
     text-decoration: none;
