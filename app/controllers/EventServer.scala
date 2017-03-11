@@ -39,8 +39,8 @@ class EventServer(validateIp: Boolean)(implicit actorSystem: ActorSystem,
   private def pushEvents =
     Source.fromPublisher(IterateeStreams.enumeratorToPublisher(enumerator))
 
-  def push(tag: String): Action[JsValue] = Action(PushEvent.combinedParser) {
-    request =>
+  def push(tag: String): Action[JsValue] =
+    Action(PushEvent.combinedParser(parse)) { request =>
       val atRequest = {
         if (validateIp)
           PushEvent.AtIpValidatedRequest(request)
@@ -51,7 +51,7 @@ class EventServer(validateIp: Boolean)(implicit actorSystem: ActorSystem,
         channel.push(extractEvent)
       }
       Ok("Got it, thanks.")
-  }
+    }
 
   def eventStream() = Action {
     val events =

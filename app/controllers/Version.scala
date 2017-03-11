@@ -1,14 +1,16 @@
 package controllers
 
 import java.util.Base64
+import javax.inject.Inject
 
 import play.api.libs.json.{JsObject, JsString, Json}
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.{AbstractController, ControllerComponents}
 
 /**
   * Provide the current git commit SHA so we can double check a deployment.
   */
-class Version extends Controller {
+class Version @Inject()(components: ControllerComponents)
+    extends AbstractController(components) {
 
   def commitDescription = {
     gitwatch.BuildInfo.gitCommitDescription.map { encoded =>

@@ -3,7 +3,7 @@ package model
 import play.api.libs.EventSource.Event
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Results._
-import play.api.mvc.{BodyParser, BodyParsers, Request}
+import play.api.mvc.{BodyParser, PlayBodyParsers, Request}
 import play.core.server.common.SubnetValidate
 
 import scala.concurrent.ExecutionContext
@@ -23,8 +23,9 @@ case class PushEvent(repositoryUrl: String) {
 
 object PushEvent {
 
-  private def urlEncodedParser(implicit executionContext: ExecutionContext) = {
-    BodyParsers.parse.urlFormEncoded.validate { map =>
+  private def urlEncodedParser(playBodyParsers: PlayBodyParsers)(
+      implicit executionContext: ExecutionContext) = {
+    playBodyParsers.formUrlEncoded.validate { map =>
       map
         .get("payload")
         .flatMap(_.headOption)
@@ -39,14 +40,14 @@ object PushEvent {
     }
   }
 
-  def combinedParser(
+  def combinedParser(playBodyParsers: PlayBodyParsers)(
       implicit executionContext: ExecutionContext): BodyParser[JsValue] = {
-    BodyParsers.parse.using { requestHeader =>
+    playBodyParsers.using { requestHeader =>
       if (requestHeader.headers
             .get("Content-Type")
             .contains("application/x-www-form-urlencoded"))
-        urlEncodedParser
-      else BodyParsers.parse.tolerantJson
+        urlEncodedParser(playBodyParsers)
+      else playBodyParsers.tolerantJson
     }
   }
 
