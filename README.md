@@ -14,7 +14,8 @@
   * [Security](#security)
 - [Recipes](#recipes)
   * [For a service](#for-a-service)
-  * [Licence](#licence)
+- [Other notes](#other-notes)
+- [Licence](#licence)
 
 <!-- tocstop -->
 
@@ -192,6 +193,14 @@ fi
 Now run `git-watch` with this inside a `tmux` or `screen` session and you have
 an automated process restart.
 
-## Licence
+# Other notes
+To regenerate TOC we use [markdown-toc](https://github.com/jonschlinkert/markdown-toc):
+
+```bash
+$ npm install -g markdown-toc
+$ markdown-toc -i README.md
+```
+
+# Licence
 * Client: MIT, Server: GPLv3.
 * Copyright (2016) Apt Elements Ltd. [William Narmontas](https://www.scalawilliam.com/)
