@@ -45,6 +45,20 @@ So typical characteristics when you would use Git Watch would be:
 * You don't need reproducibility right now
 * You don't want to invest time in a proper CI right now
 
+Why other solutions did not work for my use cases:
+* I use my own server and find it's easier to debug and tinker with things directly via SSH
+* My apps tend to use the filesystem and UDP networking
+* I didn't like using 'The Cloud' due to slow deployments by nature of having to publish and download artifacts.
+ For basic content changes it's a long wait.
+* I can still use Travis/Circle for automated testing but not for deployment.
+* From experience Jenkins is quite heavyweight but scalable in the longer run - and I don't need this scalability.
+* Using WebHooks was painful enough with all the configuration work needed including setting up an nginx and a backend to
+process for each small service.
+* Not using continuous deployment is out of question for me. I like receiving immediate feedback. Read:
+<a href="https://medium.com/continuous-delivery/why-continuous-deployment-matters-to-business-6a79b5602145#.ysyddciw9">Why Continuous Deployment matters to business</a>.
+There's no benefit for me to be deploying manually at all.
+* Non-critical projects, and so deploying straight from `master` branch is Okay.
+
 # Architecture
 1. Your **Git repository** is updated on the **Git host**.
 2. The **Git host** sends a webhook to the **Git Watch server**.
@@ -54,11 +68,47 @@ So typical characteristics when you would use Git Watch would be:
 
 ## Technical choices & reasons
 
+### User experience
+
+<dl>
+<dt>Linking out to README for getting started</dt>
+<dd>I tried includign a tutorial on the homepage but this meant having to synchronise the README
+and index.html. I even tried embedding 
+<a href="https://developer.github.com/v3/repos/contents/#get-the-readme">the README as HTML using GitHub's Content API</a>
+ (<a href="https://github.com/ScalaWilliam/git-watch/commit/0bc6ecba5216a3cd883ef4006ad86715a83986b1#diff-3b2ee6acdde9c109745551547a60c344">see the code</a>)
+  but this clearly became cumbersome. So I took the single-source approach.</dd>
+<dt>Embedding a Tweet</dt>
+<dd>Single source of marketing. Links to my Twitter account and I'd like to get more Twitter followers who are into tech
+and Git Watch sort of thing.</dd>
+<dt>Homepage links to glossaries and definitions of what a Git repository and what commands are</dt>
+<dd>To make it easier for somebody non-technical to understand what is going on. It might still be quite confusing
+but much better than NOT having any links.</dd>
+<dt><b>NOT</b> installing the hook automatically</dt>
+<dd>I did this before. It complicated the workflow too much and abstracted away an important thing
+that the user should find out what they need.</dd>
+<dd>This also required having OAuth code for very little work. Included downloading the list of available repositories
+etc meaning quite complex and unnecessary code, taking us away from the USP of this software.</dd>
+<dd>In fact, there's room for a dedicated service for selecting repositories.</dd>
+<dd>The extra complication was that we have different providers anyway.</dd>
+<dt>Auto-discovering the URL based on current Git repository</dt>
+<dd>I previously had to enter the URL for each repository explicitly and that was just too bothersome.
+Why bother if Git can allow you to compute the URL yourself.</dd>
+<dt>Not passing the commit hash to the user</dt>
+ <dd>A Git push event is a bit more than just the latest hash. There's a lot of this information
+ and it requires a lot of custom parsing that can't be re-used. Instead of this approach,
+ I realised all we need is just a trigger, and then the user can decide how to deal with the new
+ information available in Git.</dd> 
+ 
+ <dd>Extracting too much information became a scope creep that introduced significant complexity
+ in both the client and the server.</dd>
+
+</dl>
+
 ### Server side
 
 <dl>
 
-<dt><a href="https://www.w3.org/TR/eventsource/">EventSource</a> for passing events from server to client</dt>
+<dt><a href="https://www.w3.org/TR/eventsource/">EventSource</a> HTTP/S transport for passing events from server to client</dt>
 <dd>Easier to use than WebSockets because we can get the result via CURL and basic HTTP.
 WebSockets require extra application strength on the client side and server side configuration</dd>
 <dd>We only need a one-way flow, which is exactly what EventSource provides.</dd>
@@ -99,15 +149,6 @@ I tried Python, Scala, Jersey, Go, Bash clients which proved unsatisfactory. The
 <dd>Appears to be the most standard way of testing in Node.js</dd>
 </dl>
    
-## Why it doesn't pass on the commit hash
-A Git push event is a bit more than just the latest hash. There's a lot of this information
-and it requires a lot of custom parsing that can't be re-used. Instead of this approach,
-I realised all we need is just a trigger, and then the user can decide how to deal with the new
-information available in Git. 
-
-Extracting too much information became a scope creep that introduced significant complexity
-in both the client and the server.
-
 ## Security
 URLs of updated repositories are sent to the public event stream.
 
