@@ -123,6 +123,7 @@ WebSockets require extra application strength on the client side and server side
 
 <dt><a href="http://www.scala-sbt.org/">SBT</a> for building the project</dt>
 <dd>Natural fit for Scala and Play.</dd>
+<dd>See: <a href="https://www.scalawilliam.com/essential-sbt/">Essential SBT</a></dd>
 
 <dt>Code formatting with <a href="https://olafurpg.github.io/scalafmt/">scalafmt</a> and <a href="https://plugins.jetbrains.com/plugin/8236-scalafmt">IntelliJ scalafmt plugin</a></dt>
 <dd>Helps to make code more readable and consistent.</dd>
