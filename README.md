@@ -66,7 +66,7 @@ There's no benefit for me to be deploying manually at all.
 4. A **Git Watch client** listens to the stream, receives the event and then triggers your custom command. 
 
 
-## Technical choices & reasons
+## Technical choices
 
 ### User experience
 
