@@ -27,16 +27,14 @@ deploy() {
   echo Changed files from "$SHA" to master:
   changed_files;
   if [[ $(changed_files) == "" ]]; then
-   deploy_content
+   echo "Nothing relevant changed, not deploying app"
   else
    deploy_app
   fi
 }
 
 changed_files() {
-  git diff --name-only "$SHA" "master" \
-    | grep -E '^(app|conf|dist|project|build)' \
-    | grep -v 'dist/content'
+  git diff --name-only "$SHA" "master" | grep -v 'README' | grep -v 'client'
 }
 
 git remote update
