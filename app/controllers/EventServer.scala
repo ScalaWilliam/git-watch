@@ -1,11 +1,11 @@
 package controllers
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.{ Inject, Singleton }
 
 import akka.actor.ActorSystem
-import akka.stream.scaladsl.{Source, _}
+import akka.stream.scaladsl.{ Source, _ }
 import model.PushEvent
-import play.api.{Configuration, Logger}
+import play.api.{ Configuration, Logger }
 import play.api.libs.EventSource.Event
 import play.api.libs.iteratee.Concurrent
 import play.api.libs.iteratee.streams.IterateeStreams
@@ -27,10 +27,9 @@ class EventServer(validateIp: Boolean)(implicit actorSystem: ActorSystem,
   Logger.info(s"Validating IPs: ${validateIp}")
 
   @Inject
-  def this(configuration: Configuration)(
-      implicit actorSystem: ActorSystem,
-      components: ControllerComponents,
-      executionContext: ExecutionContext) = {
+  def this(configuration: Configuration)(implicit actorSystem: ActorSystem,
+                                         components: ControllerComponents,
+                                         executionContext: ExecutionContext) = {
     this(validateIp = configuration.get[Boolean]("validate-ip"))
   }
 
@@ -60,12 +59,11 @@ class EventServer(validateIp: Boolean)(implicit actorSystem: ActorSystem,
       .as("text/event-stream")
   }
 
-  def eventStreamWebsocket: WebSocket = WebSocket.accept[String, String] {
-    rq =>
-      Flow.fromSinkAndSource(
-        sink = Sink.ignore,
-        source = pushEvents.map(e => e.repositoryUrl)
-      )
+  def eventStreamWebsocket: WebSocket = WebSocket.accept[String, String] { rq =>
+    Flow.fromSinkAndSource(
+      sink = Sink.ignore,
+      source = pushEvents.map(e => e.repositoryUrl)
+    )
   }
 }
 
