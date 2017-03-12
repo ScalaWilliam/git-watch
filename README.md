@@ -15,7 +15,8 @@ Supported: GitHub, BitBucket and GitLab
 Use `git-watch --help` to get full run options.
 
 ## Use cases
-I use it for continuous deployment from `master` branch for:
+I use it for <a href="https://blog.intercom.com/why-continuous-deployment-just-keeps-on-giving/">continuous deployment</a>
+from `master` branch for:
 
 * [ActionFPS](https://actionfps.com/) and [Git Work](https://git.work/): on push to master, there are two options:
   * __Fast deployment__: Build the project with `sbt` and deploy it with `systemd` on a bare metal server.
