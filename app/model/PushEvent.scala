@@ -1,16 +1,14 @@
 package model
 
 import play.api.libs.EventSource.Event
-import play.api.libs.json.{ JsValue, Json }
-import play.api.mvc.Results._
-import play.api.mvc.{ BodyParser, PlayBodyParsers, Request }
+import play.api.libs.json.JsValue
+import play.api.mvc.Request
 import play.core.server.common.SubnetValidate
 
-import scala.concurrent.ExecutionContext
-import scala.util.Try
-
 /**
-  * Created by me on 08/02/2017.
+  * Generic push event with the fully qualified repository URL.
+  *
+  * This is the most canonical way to match against the Git repository for the client.
   */
 case class PushEvent(repositoryUrl: String) {
   def toEventSource: Event =
@@ -23,35 +21,11 @@ case class PushEvent(repositoryUrl: String) {
 
 object PushEvent {
 
-  private def urlEncodedParser(
-      playBodyParsers: PlayBodyParsers
-  )(implicit executionContext: ExecutionContext) =
-    playBodyParsers.formUrlEncoded.validate { map =>
-      map
-        .get("payload")
-        .flatMap(_.headOption)
-        .map { jsonString =>
-          Try(Json.parse(jsonString))
-            .map(Right.apply)
-            .getOrElse(Left("Could not parse JSON"))
-        }
-        .getOrElse(Left("Not found field 'payload"))
-        .left
-        .map(str => BadRequest(str))
-    }
-
-  def combinedParser(
-      playBodyParsers: PlayBodyParsers
-  )(implicit executionContext: ExecutionContext): BodyParser[JsValue] =
-    playBodyParsers.using { requestHeader =>
-      if (requestHeader.headers
-            .get("Content-Type")
-            .contains("application/x-www-form-urlencoded"))
-        urlEncodedParser(playBodyParsers)
-      else playBodyParsers.tolerantJson
-    }
-
-  case class AtRequest(request: Request[JsValue]) {
+  /**
+    * Turn a JSON request into a PushEvent if possible.
+    * Request headers are important here.
+    */
+  sealed case class AtRequest(request: Request[JsValue]) {
     def githubEvent: Option[PushEvent] =
       for {
         eventType <- request.headers.get("X-GitHub-Event")
@@ -79,6 +53,13 @@ object PushEvent {
     def anyEvent: Option[PushEvent] =
       githubEvent orElse bitbucketEvent orElse gitlabEvent
   }
+
+  type PushEventBuilder = Request[JsValue] => Option[PushEvent]
+
+  def builder(validateIp: Boolean): PushEventBuilder = {
+    if (validateIp) AtIpValidatedRequest.apply _
+    else AtRequest.apply _
+  }.andThen(_.anyEvent)
 
   /**
     * Validate source IP addresses.

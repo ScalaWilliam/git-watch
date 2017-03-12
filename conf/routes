@@ -2,5 +2,5 @@ GET         /                    @controllers.Assets.at(path="/public", file = "
 POST        /                    @controllers.EventServer.push(tag="")
 POST        /*tag                @controllers.EventServer.push(tag)
 GET         /events/             @controllers.EventServer.eventStream
-GET         /events-ws/          @controllers.EventServer.eventStreamWebsocket
+GET         /events-ws/          @controllers.EventServer.eventStreamWebSocket
 GET         /version/            @controllers.Version.version

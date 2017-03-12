@@ -7,11 +7,11 @@ import play.api.libs.json.{ JsObject, JsString, Json }
 import play.api.mvc.{ AbstractController, ControllerComponents }
 
 /**
-  * Provide the current git commit SHA so we can double check a deployment.
+  * Provide the current git commit SHA so we can double verify the deployment is successful.
   */
 class Version @Inject()(components: ControllerComponents) extends AbstractController(components) {
 
-  def commitDescription =
+  def commitDescription: Option[String] =
     gitwatch.BuildInfo.gitCommitDescription.map { encoded =>
       new String(Base64.getDecoder.decode(encoded), "UTF-8")
     }
