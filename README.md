@@ -2,7 +2,23 @@
 
 > Trigger commands when your Git repository is updated
 
-## Usage
+<!-- toc -->
+
+- [Usage](#usage)
+- [Use cases](#use-cases)
+- [Architecture](#architecture)
+  * [Technical choices](#technical-choices)
+    + [User experience](#user-experience)
+    + [Server side](#server-side)
+    + [Client side](#client-side)
+  * [Security](#security)
+- [Recipes](#recipes)
+  * [For a service](#for-a-service)
+  * [Licence](#licence)
+
+<!-- tocstop -->
+
+# Usage
 Supported: GitHub, BitBucket and GitLab
 
 1. Go to 'WebHooks' section of your GitHub, BitBucket or GitLab repository.
@@ -14,7 +30,7 @@ Supported: GitHub, BitBucket and GitLab
 
 Use `git-watch --help` to get full run options.
 
-## Use cases
+# Use cases
 I use it for <a href="https://blog.intercom.com/why-continuous-deployment-just-keeps-on-giving/">continuous deployment</a>
 from `master` branch for:
 
