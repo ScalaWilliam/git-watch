@@ -51,6 +51,54 @@ So typical characteristics when you would use Git Watch would be:
 3. The **Git Watch server** broadcasts the repository url to the event stream at `https://git.watch/events/`.
 4. A **Git Watch client** listens to the stream, receives the event and then triggers your custom command. 
 
+
+## Technical choices & reasons
+
+### Server side
+
+<dl>
+
+<dt><a href="https://www.w3.org/TR/eventsource/">EventSource</a> for passing events from server to client</dt>
+<dd>Easier to use than WebSockets because we can get the result via CURL and basic HTTP.
+WebSockets require extra application strength on the client side and server side configuration</dd>
+<dd>We only need a one-way flow, which is exactly what EventSource provides.</dd>
+
+<dt><a href="https://www.playframework.com/">Play Framework</a> and <a href="http://www.scala-lang.org">Scala programming language</a></dt>
+<dd>I am specialised in Scala and this problem is for me easiest to solve with Play & Scala<./dd>
+<dd>Play provides us with native EventSource support.</dd>
+<dd>We use ScalaTest as the de facto Scala testing framework.</dd>
+<dd>See: <a href="https://www.youtube.com/watch?v=N11rdUvcp7g&feature=youtu.be">Scala for 2017 talk</a></dd>
+<dd>See: <a href="https://www.youtube.com/watch?v=tsR0zc6kzRk">An Introduction to Scala (2014)</a></dd>
+
+<dt><a href="http://www.scala-sbt.org/">SBT</a> for building the project</dt>
+<dd>Natural fit for Scala and Play.</dd>
+
+<dt>Code formatting with <a href="https://olafurpg.github.io/scalafmt/">scalafmt</a> and <a href="https://plugins.jetbrains.com/plugin/8236-scalafmt">IntelliJ scalafmt plugin</a></dt>
+<dd>Helps to make code more readable and consistent.</dd>
+
+<dt>Recommended IDE: <a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a></dt>
+<dd>Works very well with SBT and Scala. De facto Scala IDE.</dd>
+<dd>Make sure to install the <a href="https://plugins.jetbrains.com/plugin/1347-scala">Scala Plugin</a>.</dd>
+
+</dl>
+
+### Client side
+
+<dl>
+<dt><a href="https://nodejs.org/en/">Node.js</a></dt>
+<dd>Comes with the most standards-compliant <a href="https://www.npmjs.com/package/eventsource">non-web EventSource client</a>.
+I tried Python, Scala, Jersey, Go, Bash clients which proved unsatisfactory. The Node library worked out the best.</dd>
+<dd>Lightweight and most common language for web developers</dd>
+<dt><a href="https://www.npmjs.com/package/yargs">yargs</a> for argument parsing</dt>
+<dd>I tried <a href="https://www.npmjs.com/package/argv">argv</a> but it's a bit unfriendly to use</dd>
+<dd>Allows to pass a full command after <code>--</code></dd>
+<dt><a href="https://www.npmjs.com/package/console-stamp">console-stamp</a></dt>
+<dd>Realised it's troublesome to look at the logs and not see when an event happened</dd>
+<dt><a href="https://mochajs.org/">Mocha</a> and <a href="http://chaijs.com/">Chai</a></dt>
+<dd>Documented well enough for me to use without difficulty.</dd>
+<dd>Appears to be the most standard way of testing in Node.js</dd>
+</dl>
+   
 ## Why it doesn't pass on the commit hash
 A Git push event is a bit more than just the latest hash. There's a lot of this information
 and it requires a lot of custom parsing that can't be re-used. Instead of this approach,
@@ -84,7 +132,6 @@ fi
 
 Now run `git-watch` with this inside a `tmux` or `screen` session and you have
 an automated process restart.
-
 
 ## Licence
 * Client: MIT, Server: GPLv3.
