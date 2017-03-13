@@ -1,8 +1,8 @@
 package mvc
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 import play.api.mvc.Results.BadRequest
-import play.api.mvc.{BodyParser, PlayBodyParsers}
+import play.api.mvc.{ BodyParser, PlayBodyParsers }
 
 import scala.concurrent.ExecutionContext
 import scala.util.Try
@@ -32,13 +32,15 @@ object CombinedJsonBodyParser {
         .map(str => BadRequest(str))
     }
 
-  def apply(playBodyParsers: PlayBodyParsers)(implicit executionContext: ExecutionContext): BodyParser[JsValue] =
+  def apply(
+      playBodyParsers: PlayBodyParsers
+  )(implicit executionContext: ExecutionContext): BodyParser[JsValue] =
     playBodyParsers.using { requestHeader =>
-      if (requestHeader.headers
-            .get("Content-Type")
+      if (requestHeader.contentType
+            .map(_.toLowerCase)
             .contains("application/x-www-form-urlencoded"))
         urlEncodedParser(playBodyParsers)
-      else playBodyParsers.tolerantJson
+      else playBodyParsers.json
     }
 
 }
