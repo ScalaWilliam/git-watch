@@ -1,15 +1,11 @@
 language: scala
 scala:
-  - 2.11.8
+  - 2.12.1
 cache:
   directories:
     - $HOME/.ivy2/cache
     - $HOME/.sbt/boot/
-    - $HOME/.npm
 script:
   - sbt test
-  - cd client && npm install && npm run test
 jdk:
   - oraclejdk8
-before_script:
-  - npm install -g mocha
