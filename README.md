@@ -153,6 +153,8 @@ WebSockets require extra application strength on the client side and server side
 
 ### Client side
 
+> [Git Watch Client repository](https://github.com/ScalaWilliam/git-watch-client).
+
 <dl>
 <dt><a href="https://nodejs.org/en/">Node.js</a></dt>
 <dd>Comes with the most standards-compliant <a href="https://www.npmjs.com/package/eventsource">non-web EventSource client</a>.
