@@ -1,12 +1,13 @@
-scalaVersion := "2.12.1"
+scalaVersion := "2.12.3"
 name := "gitwatch"
 enablePlugins(PlayScala)
 
 libraryDependencies ++= Seq(
-  "org.scalatest"     %% "scalatest"                       % "3.0.1" % "test",
-  "com.typesafe.play" %% "play-json"                       % "2.6.0-M5",
+  "org.scalatest"     %% "scalatest"                       % "3.0.4" % "test",
+  "com.typesafe.play" %% "play-json"                       % "2.6.6",
   "com.typesafe.play" %% "play-iteratees"                  % "2.6.1",
-  "com.typesafe.play" %% "play-iteratees-reactive-streams" % "2.6.1"
+  "com.typesafe.play" %% "play-iteratees-reactive-streams" % "2.6.1",
+  guice
 )
 
 publishArtifact in (Compile, packageDoc) := false

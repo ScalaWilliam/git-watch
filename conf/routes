@@ -1,5 +1,5 @@
-GET         /                    @controllers.Assets.at(path="/public", file = "index.html")
-POST        /                    @controllers.EventServer.push(tag="")
-POST        /*tag                @controllers.EventServer.push(tag)
-GET         /events/             @controllers.EventServer.eventStream
-GET         /events-ws/          @controllers.EventServer.eventStreamWebSocket
+GET         /                    controllers.Assets.at(path="/public", file = "index.html")
+POST        /                    controllers.EventServer.push(tag="")
+POST        /*tag                controllers.EventServer.push(tag)
+GET         /events/             controllers.EventServer.eventStream
+GET         /events-ws/          controllers.EventServer.eventStreamWebSocket
