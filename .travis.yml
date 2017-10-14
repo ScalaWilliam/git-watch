@@ -1,6 +1,6 @@
 language: scala
 scala:
-  - 2.12.1
+  - 2.12.3
 cache:
   directories:
     - $HOME/.ivy2/cache

@@ -6,8 +6,7 @@ libraryDependencies ++= Seq(
   "org.scalatest"     %% "scalatest"                       % "3.0.4" % "test",
   "com.typesafe.play" %% "play-json"                       % "2.6.6",
   "com.typesafe.play" %% "play-iteratees"                  % "2.6.1",
-  "com.typesafe.play" %% "play-iteratees-reactive-streams" % "2.6.1",
-  guice
+  "com.typesafe.play" %% "play-iteratees-reactive-streams" % "2.6.1"
 )
 
 publishArtifact in (Compile, packageDoc) := false

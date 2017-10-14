@@ -1,7 +1,5 @@
 package controllers
 
-import javax.inject.{ Inject, Singleton }
-
 import akka.actor.{ ActorSystem, Cancellable }
 import akka.stream.scaladsl.{ Source, _ }
 import model.PushEvent
@@ -20,13 +18,11 @@ import scala.concurrent.duration._
 /**
   * Event server: we take events, push them to a broadcast channel and then push them to any EventSource listeners.
   */
-@Singleton
 class EventServer(atRequestBuild: PushEventBuilder)(implicit actorSystem: ActorSystem,
                                                     components: ControllerComponents,
                                                     executionContext: ExecutionContext)
     extends AbstractController(components) {
 
-  @Inject
   def this(configuration: Configuration)(implicit actorSystem: ActorSystem,
                                          components: ControllerComponents,
                                          executionContext: ExecutionContext) = {
@@ -66,6 +62,6 @@ object EventServer {
 
   /** Needed to prevent premature close of connection if not enough events coming through **/
   val keepAliveEventSource: Source[Event, Cancellable] = {
-    Source.tick(10.seconds, 10.seconds, Event(""))
+    Source.tick(1.second, 10.seconds, Event(""))
   }
 }
