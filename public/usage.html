@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+    <title>Git Watch</title>
+    <style>
+        body {
+            background: rgb(248, 250, 240);
+            line-height: 1.6;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<h1>Git Watch Usage</h1>
+<blockquote>
+    <p>Trigger commands when your Git repository is updated</p>
+</blockquote>
+<h1 id="usage">Usage</h1>
+<p>Supported: GitHub, BitBucket and GitLab</p>
+<ol style="list-style-type: decimal">
+    <li>Go to 'WebHooks' section of your GitHub, BitBucket or GitLab repository.</li>
+    <li>Add the WebHook URL <code>https://git.watch/</code>.</li>
+    <li>On your target machine, run <code>npm install -g gitwatch-client</code>.</li>
+    <li>On your target machine, go to the clone of your repository and run <code>git-watch -- ./push.sh</code>.</li>
+    <li>Make a commit and push to your Git repository.</li>
+    <li>You should see <code>push.sh</code> executed automatically!</li>
+</ol>
+<p>Use <code>git-watch --help</code> to get full run options.</p>
+<h2 id="security">Security</h2>
+<p>URLs of updated repositories are sent to the public event stream.</p>
+<p>Source IP addresses are checked for BitBucket and GitHub to prevent DOS.</p>
+<h1 id="recipes">Recipes</h1>
+<h2 id="for-a-service">For a service</h2>
+<p><code>push.sh</code> could be:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">#!/bin/bash
+git fetch
+if [[ $(git diff --name-only HEAD origin/master) != "" ]]; then
+    pkill -F .pid || true
+    git pull origin master
+    pip install --user -r requirements.txt || true
+    python -m app &
+    echo "$!" > .pid
+fi
+</code></pre>
+</div>
+<p>Now run <code>git-watch</code> with this inside systemd or a tmux/screen session and you have an
+    automated process restart.</p>
+</body>
+</html>

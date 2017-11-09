@@ -1,0 +1,195 @@
+<!doctype html>
+<html>
+<head>
+    <title>Git Watch</title>
+    <style>
+        body {
+            background: rgb(248, 250, 240);
+            line-height: 1.6;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<h1>git.watch architecture</h1>
+<blockquote>
+    <p>Trigger commands when your Git repository is updated</p>
+</blockquote>
+<h1 id="architecture">Architecture</h1>
+<ol style="list-style-type: decimal">
+    <li>Your <strong>Git repository</strong> is updated on the <strong>Git host</strong>.</li>
+    <li>The <strong>Git host</strong> sends a webhook to the <strong>Git Watch server</strong>.</li>
+    <li>The <strong>Git Watch server</strong> broadcasts the repository url to the event stream at <code>https://git.watch/events/</code>.
+    </li>
+    <li>A <strong>Git Watch client</strong> listens to the stream, receives the event and then triggers your custom
+        command.
+    </li>
+</ol>
+<h2 id="technical-choices">Technical choices</h2>
+<h3 id="user-experience">User experience</h3>
+<dl>
+    <dt>
+        Linking out to README for getting started
+    </dt>
+    <dd>
+        I tried includign a tutorial on the homepage but this meant having to synchronise the README and index.html. I
+        even tried embedding <a href="https://developer.github.com/v3/repos/contents/#get-the-readme">the README as HTML
+        using GitHub's Content API</a> (<a
+            href="https://github.com/ScalaWilliam/git-watch/commit/0bc6ecba5216a3cd883ef4006ad86715a83986b1#diff-3b2ee6acdde9c109745551547a60c344">see
+        the code</a>) but this clearly became cumbersome. So I took the single-source approach.
+    </dd>
+    <dt>
+        Embedding a Tweet
+    </dt>
+    <dd>
+        Single source of marketing. Links to my Twitter account and I'd like to get more Twitter followers who are into
+        tech and Git Watch sort of thing.
+    </dd>
+    <dt>
+        Homepage links to glossaries and definitions of what a Git repository and what commands are
+    </dt>
+    <dd>
+        To make it easier for somebody non-technical to understand what is going on. It might still be quite confusing
+        but much better than NOT having any links.
+    </dd>
+    <dt>
+        <b>NOT</b> installing the hook automatically
+    </dt>
+    <dd>
+        I did this before. It complicated the workflow too much and abstracted away an important thing that the user
+        should find out what they need.
+    </dd>
+    <dd>
+        This also required having OAuth code for very little work. Included downloading the list of available
+        repositories etc meaning quite complex and unnecessary code, taking us away from the USP of this software.
+    </dd>
+    <dd>
+        In fact, there's room for a dedicated service for selecting repositories.
+    </dd>
+    <dd>
+        The extra complication was that we have different providers anyway.
+    </dd>
+    <dt>
+        Auto-discovering the URL based on current Git repository
+    </dt>
+    <dd>
+        I previously had to enter the URL for each repository explicitly and that was just too bothersome. Why bother if
+        Git can allow you to compute the URL yourself.
+    </dd>
+    <dt>
+        Not passing the commit hash to the user
+    </dt>
+    <dd>
+        A Git push event is a bit more than just the latest hash. There's a lot of this information and it requires a
+        lot of custom parsing that can't be re-used. Instead of this approach, I realised all we need is just a trigger,
+        and then the user can decide how to deal with the new information available in Git.
+    </dd>
+    <dd>
+        Extracting too much information became a scope creep that introduced significant complexity in both the client
+        and the server.
+    </dd>
+</dl>
+<h3 id="server-side">Server side</h3>
+<dl>
+    <dt>
+        <a href="https://www.w3.org/TR/eventsource/">EventSource</a> HTTP/S transport for passing events from server to
+        client
+    </dt>
+    <dd>
+        Easier to use than WebSockets because we can get the result via CURL and basic HTTP. WebSockets require extra
+        application strength on the client side and server side configuration
+    </dd>
+    <dd>
+        We only need a one-way flow, which is exactly what EventSource provides.
+    </dd>
+    <dt>
+        <a href="https://www.playframework.com/">Play Framework</a> and <a href="http://www.scala-lang.org">Scala
+        programming language</a>
+    </dt>
+    <dd>
+        I am specialised in Scala and this problem is for me easiest to solve with Play &amp; Scala&lt;./dd&gt;
+    <dd>
+        Play provides us with native EventSource support.
+    </dd>
+    <dd>
+        We use ScalaTest as the de facto Scala testing framework.
+    </dd>
+    <dd>
+        See: <a href="https://www.youtube.com/watch?v=N11rdUvcp7g&amp;feature=youtu.be">Scala for 2017
+        talk</a>
+    </dd>
+    <dd>
+        See: <a href="https://www.youtube.com/watch?v=tsR0zc6kzRk">An Introduction to Scala (2014)</a>
+    </dd>
+    <dt>
+        <a href="http://www.scala-sbt.org/">SBT</a> for building the project
+    </dt>
+    <dd>
+        Natural fit for Scala and Play.
+    </dd>
+    <dd>
+        See: <a href="https://www.scalawilliam.com/essential-sbt/">Essential SBT</a>
+    </dd>
+    <dt>
+        Code formatting with <a href="https://olafurpg.github.io/scalafmt/">scalafmt</a> and <a
+            href="https://plugins.jetbrains.com/plugin/8236-scalafmt">IntelliJ scalafmt plugin</a>
+    </dt>
+    <dd>
+        Helps to make code more readable and consistent.
+    </dd>
+    <dt>
+        Recommended IDE: <a href="https://www.jetbrains.com/idea/">IntelliJ IDEA</a>
+    </dt>
+    <dd>
+        Works very well with SBT and Scala. De facto Scala IDE.
+    </dd>
+    <dd>
+        Make sure to install the <a href="https://plugins.jetbrains.com/plugin/1347-scala">Scala Plugin</a>.
+    </dd>
+</dl>
+<h3 id="client-side">Client side</h3>
+<blockquote>
+    <p><a href="https://github.com/ScalaWilliam/git-watch-client">Git Watch Client repository</a>.</p>
+</blockquote>
+<dl>
+    <dt>
+        <a href="https://nodejs.org/en/">Node.js</a>
+    </dt>
+    <dd>
+        Comes with the most standards-compliant <a href="https://www.npmjs.com/package/eventsource">non-web EventSource
+        client</a>. I tried Python, Scala, Jersey, Go, Bash clients which proved unsatisfactory. The Node library worked
+        out the best.
+    </dd>
+    <dd>
+        Lightweight and most common language for web developers
+    </dd>
+    <dt>
+        <a href="https://www.npmjs.com/package/yargs">yargs</a> for argument parsing
+    </dt>
+    <dd>
+        I tried <a href="https://www.npmjs.com/package/argv">argv</a> but it's a bit unfriendly to use
+    </dd>
+    <dd>
+        Allows to pass a full command after <code>--</code>
+    </dd>
+    <dt>
+        <a href="https://www.npmjs.com/package/console-stamp">console-stamp</a>
+    </dt>
+    <dd>
+        Realised it's troublesome to look at the logs and not see when an event happened
+    </dd>
+    <dt>
+        <a href="https://mochajs.org/">Mocha</a> and <a href="http://chaijs.com/">Chai</a>
+    </dt>
+    <dd>
+        Documented well enough for me to use without difficulty.
+    </dd>
+    <dd>
+        Appears to be the most standard way of testing in Node.js
+    </dd>
+</dl>
+<h2 id="security">Security</h2>
+<p>URLs of updated repositories are sent to the public event stream.</p>
+<p>Source IP addresses are checked for BitBucket and GitHub to prevent DOS.</p>
+</body>
+</html>
