@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+    <title>Git Watch</title>
+    <style>
+        body {
+            background: rgb(248, 250, 240);
+            line-height: 1.6;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<h1>Git Watch use cases</h1>
+<blockquote>
+    <p>Trigger commands when your Git repository is updated</p>
+</blockquote>
+<h1 id="use-cases">Use cases</h1>
+<p>I use it for <a href="https://blog.intercom.com/why-continuous-deployment-just-keeps-on-giving/">continuous
+    deployment</a> from <code>master</code> branch for:</p>
+<ul>
+    <li><a href="https://actionfps.com/">ActionFPS</a> and <a href="https://git.work/">Git Work</a>: on push to master,
+        there are two options:
+    </li>
+    <li><strong>Fast deployment</strong>: Build the project with <code>sbt</code> and deploy it with
+        <code>systemd</code> on a bare metal server.
+    </li>
+    <li><strong>Instant deployment</strong>: <code>rsync</code> the HTML templates if they are the only change in the
+        branch.
+    </li>
+    <li>Example deployment scripts: <a href="https://github.com/ScalaWilliam/ActionFPS/blob/master/push.sh">ActionFPS
+        push.sh</a>, <a href="https://github.com/ScalaWilliam/git-watch/blob/master/push.sh">Git Watch push.sh</a>, <a
+            href="https://github.com/ScalaWilliam/git-work/blob/master/push">Git Work push</a>.
+    </li>
+    <li><a href="https://actionfps.com/">ActionFPS</a>:</li>
+    <li>Redeploy a simple background Python app on a bare metal server.</li>
+    <li>
+        <a href="https://github.com/ActionFPS/ActionFPS-Game/blob/960794fd4bde6cc56d812e7cb09c0d25685b633c/Makefile.deploy">Build
+            a game server binary and deploy it</a> with <code>systemd</code> on a bare metal server.
+    </li>
+    <li><a href="https://www.scalawilliam.com/">ScalaWilliam.com</a> (previously):</li>
+    <li>Build the static site and deploy it automatically to Firebase.</li>
+    <li>However, now I <a href="https://github.com/ScalaWilliam/ScalaWilliam.com/blob/master/.travis.yml">deploy to
+        Firebase via Travis-CI</a> (<a href="https://www.youtube.com/watch?v=QLVzozWDYAs">See a YouTube tutorial</a>) in
+        order to have fewer servers to manage. Unfortunately, deploy speeds are poorer than git watch.
+    </li>
+    <li>Before Git Watch and Travis, I used a custom PHP WebHook receiver. However there was too much management
+        involved in getting it to work: Setting up PHP-FPM, nginx, etc, just for simple deployments.
+    </li>
+    <li>Git Watch only needs HTTPS access and that's it!</li>
+    <li>This would also work very well for deploying changes to your VPS/private server for your Wordpress, PHP and
+        other pages. Super easy and simple - just use <code>git pull</code> as the executable command and that's it!
+    </li>
+</ul>
+<p>So typical characteristics when you would use Git Watch would be:</p>
+<ul>
+    <li>You're experimenting
+    </li>
+    <li>Project is lightweight
+    </li>
+    <li>You want rapid iterations
+    </li>
+    <li>You don't need &quot;The Cloud&quot; yet<br/>
+    </li>
+    <li>You have minimal scaling needs
+    </li>
+    <li>You want to deploy where you build
+    </li>
+    <li>You want instant content redeploys
+    </li>
+    <li>You don't need reproducibility right now
+    </li>
+    <li>You don't want to invest time in a proper CI right now</li>
+</ul>
+<p>Why other solutions did not work for my use cases:</p>
+<ul>
+    <li>I use my own server and find it's easier to debug and tinker with things directly via SSH
+    </li>
+    <li>My apps tend to use the filesystem and UDP networking
+    </li>
+    <li>I didn't like using 'The Cloud' due to slow deployments by nature of having to publish and download artifacts.
+        For basic content changes it's a long wait.
+    </li>
+    <li>I can still use Travis/Circle for automated testing but not for deployment.
+    </li>
+    <li>From experience Jenkins is quite heavyweight but scalable in the longer run - and I don't need this scalability.
+    </li>
+    <li>Using WebHooks was painful enough with all the configuration work needed including setting up an nginx and a
+        backend to process for each small service.
+    </li>
+    <li>Not using continuous deployment is out of question for me. I like receiving immediate feedback. Read: <a
+            href="https://medium.com/continuous-delivery/why-continuous-deployment-matters-to-business-6a79b5602145#.ysyddciw9">Why
+        Continuous Deployment matters to business</a>. There's no benefit for me to be deploying manually at all.
+    </li>
+    <li>Non-critical projects, and so deploying straight from <code>master</code> branch is Okay.</li>
+</ul>
+</body>
+</html>

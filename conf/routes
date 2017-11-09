@@ -1,5 +1,9 @@
-GET         /                    controllers.Assets.at(path="/public", file = "index.html")
-POST        /                    controllers.EventServer.push(tag="")
-POST        /*tag                controllers.EventServer.push(tag)
-GET         /events/             controllers.EventServer.eventStream
-GET         /events-ws/          controllers.EventServer.eventStreamWebSocket
+GET         /                     controllers.Assets.at(path="/public", file = "index.html")
+GET         /usage/               controllers.Assets.at(path="/public", file = "usage.html")
+GET         /protocol/            controllers.Assets.at(path="/public", file = "protocol.html")
+GET         /architecture/        controllers.Assets.at(path="/public", file = "architecture.html")
+GET         /use-cases/           controllers.Assets.at(path="/public", file = "use-cases.html")
+POST        /                     controllers.EventServer.push(tag="")
+POST        /*tag                 controllers.EventServer.push(tag)
+GET         /events/              controllers.EventServer.eventStream
+GET         /events-ws/           controllers.EventServer.eventStreamWebSocket

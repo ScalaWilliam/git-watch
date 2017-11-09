@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+    <title>Git Watch protocol specification</title>
+</head>
+<body>
+<h1>Git Watch protocol specification</h1>
+<h2>Standardised WebHooks for Git</h2>
+<p>There currently are two ways to receive reactive update events to Git repositories:</p>
+<ol>
+    <li>Webhooks: GitHub/GitLab/BitBucket and other implementations make POST requests to predetermined targets.</li>
+    <li>Polling: git fetch, git diff</li>
+</ol>
+<p>Polling is no longer an acceptable solution because of the high latency.</p>
+<p>Proprietary webhooks cause vendor lock-in as they require special APIs.</p>
+<p>WebSub has been put out as a web standard to do publish-subscribe webhooks without predetermined targets.</p>
+<p>In this specification, we combine WebSub and Git to provide a standard which allows us to generically
+    react to changes to Git repositories.</p>
+
+<h2>Requirements</h2>
+
+<p>There are two key moving parts:</p>
+<ul>
+    <li>Serving metadata via HTTP/S</li>
+    <li>Pushing the update to the WebSub Hub</li>
+</ul>
+
+<h2>Serving metadata</h2>
+
+<p>Metadata is served via the reference HTML page.</p>
+<p>For WebSub to work, for an update to be registered, the HTML page must change with every update.
+    It could be a simple change in the 'last-updated' of the repository.</p>
+
+<p>Also for WebSub to work, we must supply a WebSub Hub's URL and the "self" URL of the page:</p>
+<pre><code>&lt;link rel=&quot;hub&quot; href=&quot;https://hub.example.com/&quot;&gt;
+&lt;link rel=&quot;self&quot; href=&quot;http://example.com/git-repository&quot;&gt;</code></pre>
+
+<p>The only other metadata that is essential is the Git repository's URL, because that makes it easy for
+    us to create generic clients that would capture whether there's a new branch, new commit, new tag, and the like.</p>
+<pre><code>&lt;link rel=&quot;git&quot; href=&quot;http://example.com/git-repository&quot;&gt;
+&lt;link rel=&quot;git&quot; href=&quot;git://example.com:git-repository&quot;&gt;
+&lt;link rel=&quot;git&quot; href=&quot;ssh://git@example.com:git-repository&quot;&gt;</code></pre>
+
+<h2>Pushing the update</h2>
+<p>When an update is accepted, the Git server will send a request to the hub at <code>https://hub.example.com/</code>.
+    The Hub will ensure that the "self" page at <code>http://example.com/git-repository</code> has changed.
+    Then it will distribute the update to all its subscribers.</p>
+
+<p>The Git server may change the HTML page immediately on push, or the HTML page may be dynamically updated with the
+    last-updated date from Git (how?).</p>
+
+<p>The subscribers would then react accordingly.</p>
+<p>Subscribers are HTTP endpoints, although it is possible to use HTTP clients to access this via WebSub-to-EventSource
+    bridge.</p>
+<p>Use cases will be described later.</p>
+
+<h2>Security considerations</h2>
+<p>Users may not wish proprietary data to leak out. There are following levels of openness:</p>
+<ol>
+    <li>Fully open: anybody can clone repositories. No solution needed here.</li>
+    <li>Part-open: Git repository unavailable, but we may want easy usability with Git Watch clients.
+        <br/>
+        In such case, the HTML page can emit last updated date, or even a hash of it, in order ot allow the WebSub
+        event to be triggered.
+    </li>
+    <li>Fully closed: Not even an update's existence should be publicly known.
+        Proprietary solutions recommended instead.
+    </li>
+</ol>
+
+<p>In most cases, 'Part-open' will be good enough.</p>
+
+<p>WebSub security considerations: documented in WebSub specification.</p>
+
+</body>
+</html>
